@@ -526,7 +526,7 @@
             requestAnimationFrame(animateParticles);
         }
         initParticles(); animateParticles();
-        let baseLikes = 0;
+               let baseLikes = 0;
         let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
         let totalLikes = baseLikes + (userHasLiked ? 1 : 0);
 
@@ -640,25 +640,48 @@
             });
         }
 
-        let currentAudio = null, currentButton = null;
+        let currentAudio = null, currentButton = null, currentTrackId = null;
+        let listenTimer = null;
         let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
 
         function playAudio(url, btn, trackId) {
-            if (!countedTracks[trackId]) {
-                countedTracks[trackId] = true;
-                localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
-                streams[trackId]++;
-                localStorage.setItem('oipasss_streams', JSON.stringify(streams));
-                sortChart();
+            if (currentAudio && currentButton === btn) {
+                currentAudio.pause();
+                currentAudio = null;
+                btn.innerText = "Послушать";
+                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+                return;
             }
 
-            if (currentAudio && currentButton === btn) {
-                currentAudio.pause(); currentAudio = null; btn.innerText = "Послушать"; return; }
             if (currentAudio) {
-                currentAudio.pause(); if (currentButton) currentButton.innerText = "Послушать"; }
+                currentAudio.pause();
+                if (currentButton) currentButton.innerText = "Послушать";
+                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+            }
             
-            currentAudio = new Audio(url); currentButton = btn; btn.innerText = "Пауза"; currentAudio.play();
-            currentAudio.onended = () => { btn.innerText = "Послушать"; currentAudio = null; currentButton = null; };
+            currentAudio = new Audio(url);
+            currentButton = btn;
+            currentTrackId = trackId;
+            btn.innerText = "Пауза";
+            currentAudio.play();
+
+            if (!countedTracks[trackId]) {
+                listenTimer = setTimeout(() => {
+                    countedTracks[trackId] = true;
+                    localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
+                    streams[trackId]++;
+                    localStorage.setItem('oipasss_streams', JSON.stringify(streams));
+                    sortChart();
+                    listenTimer = null;
+                }, 10000);
+            }
+
+            currentAudio.onended = () => {
+                btn.innerText = "Послушать";
+                currentAudio = null;
+                currentButton = null;
+                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+            };
         }
 
         const button = document.getElementById('themeButton');
