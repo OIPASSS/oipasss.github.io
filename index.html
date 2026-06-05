@@ -13,6 +13,9 @@
             --sub-text: #777777;
             --badge-bg: #ffffff;
             --badge-color: #000000;
+            --particle-color: rgba(255, 255, 255, 0.4);
+            --flask-border: #ffffff;
+            --flask-fill: #ffffff;
         }
         [data-theme="light"] {
             --bg-color: #ffffff;
@@ -22,6 +25,9 @@
             --sub-text: #666666;
             --badge-bg: #000000;
             --badge-color: #ffffff;
+            --particle-color: rgba(0, 0, 0, 0.3);
+            --flask-border: #000000;
+            --flask-fill: #000000;
         }
         body {
             background-color: var(--bg-color);
@@ -34,6 +40,16 @@
             min-height: 100vh;
             transition: background-color 0.3s, color 0.3s;
             overflow-x: hidden;
+            position: relative;
+        }
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
         .container {
             max-width: 800px;
@@ -42,6 +58,8 @@
             box-sizing: border-box;
             margin-left: 5%;
             text-align: left;
+            position: relative;
+            z-index: 2;
         }
         @media (min-width: 768px) {
             .container {
@@ -190,28 +208,86 @@
             color: var(--bg-color);
             border-color: var(--text-color);
         }
-        .like-section {
+        .custom-like-container {
             border: 1px solid var(--card-border);
             background: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
             max-width: 550px;
-        }
-        .like-title {
-            font-size: 0.8rem;
-            color: var(--sub-text);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .like-button-wrapper {
             display: flex;
-            justify-content: flex-start;
+            align-items: center;
+            gap: 25px;
+            box-sizing: border-box;
+            transition: all 0.3s;
+        }
+        .flask-wrapper {
+            position: relative;
+            width: 50px;
+            height: 70px;
+            flex-shrink: 0;
+        }
+        .flask {
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--flask-border);
+            border-radius: 6px 6px 24px 24px;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        .flask::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 35%;
+            width: 30%;
+            height: 25%;
+            border-bottom: 3px solid var(--flask-border);
+            border-left: 3px solid var(--flask-border);
+            border-right: 3px solid var(--flask-border);
+            box-sizing: border-box;
+        }
+        .flask-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background-color: var(--flask-fill);
+            transition: height 0.5s ease;
+        }
+        .like-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .heart-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: max-content;
+            color: var(--text-color);
+            transition: transform 0.1s;
+        }
+        .heart-btn:active {
+            transform: scale(1.2);
+        }
+        .like-stats {
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .target-node {
+            color: var(--sub-text);
+            font-size: 0.75rem;
         }
     </style>
-    <script src="https://unpkg.com"></script>
 </head>
 <body>
+    <canvas id="particles-canvas"></canvas>
     <div class="container">
         <button class="theme-toggle" id="themeButton">Сменить тему</button>
         <div class="header-section">
@@ -231,7 +307,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -241,7 +317,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -251,7 +327,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -261,7 +337,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -271,7 +347,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -281,7 +357,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -291,7 +367,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -301,7 +377,7 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
@@ -311,48 +387,101 @@
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://soundhelix.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
             </div>
         </div>
-        <div class="like-section">
-            <div class="like-title">Сайт живет? Проверь:</div>
-            <div class="like-button-wrapper">
-                <div data-lyket-type="clap" data-lyket-id="oipasss-final-clean" data-lyket-namespace="musician" data-lyket-template="twitter"></div>
+        <div class="custom-like-container">
+            <div class="flask-wrapper">
+                <div class="flask">
+                    <div class="flask-fill" id="flaskFill"></div>
+                </div>
+            </div>
+            <div class="like-controls">
+                <button class="heart-btn" id="heartBtn">♡</button>
+                <div class="like-stats" id="likeStats">Лайков: 0</div>
+                <div class="target-node" id="targetNode">Цель: 10</div>
             </div>
         </div>
     </div>
     <script>
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        function initParticles() { for (let i = 0; i < 40; i++) particles.push(new Particle()); }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles();
+        animateParticles();
+
+        let likes = parseInt(localStorage.getItem('oipasss_likes')) || 0;
+        const heartBtn = document.getElementById('heartBtn');
+        const flaskFill = document.getElementById('flaskFill');
+        const likeStats = document.getElementById('likeStats');
+        const targetNode = document.getElementById('targetNode');
+        function getTarget(currentLikes) {
+            if (currentLikes < 10) return 10;
+            if (currentLikes < 100) return 100;
+            if (currentLikes < 1000) return 1000;
+            return Math.pow(10, Math.floor(Math.log10(currentLikes)) + 1);
+        }
+        function updateLikesUI() {
+            const target = getTarget(likes);
+            likeStats.innerText = `Лайков: ${likes}`;
+            targetNode.innerText = `Цель: ${target}`;
+            const percentage = Math.min((likes / target) * 100, 100);
+            flaskFill.style.height = `${percentage}%`;
+            heartBtn.innerText = likes > 0 ? '♥' : '♡';
+        }
+        heartBtn.addEventListener('click', () => {
+            likes++;
+            localStorage.setItem('oipasss_likes', likes);
+            updateLikesUI();
+        });
+        updateLikesUI();
+
         let currentAudio = null, currentButton = null;
         function playAudio(url, btn) {
-            if (currentAudio && currentButton === btn) {
-                currentAudio.pause();
-                currentAudio = null;
-                btn.innerText = "Послушать";
-                return;
-            }
-            if (currentAudio) {
-                currentAudio.pause();
-                if (currentButton) currentButton.innerText = "Послушать";
-            }
-            currentAudio = new Audio(url);
-            currentButton = btn;
-            btn.innerText = "Пауза";
-            currentAudio.play();
-            currentAudio.onended = () => {
-                btn.innerText = "Послушать";
-                currentAudio = null;
-                currentButton = null;
-            };
+            if (currentAudio && currentButton === btn) { currentAudio.pause(); currentAudio = null; btn.innerText = "Послушать"; return; }
+            if (currentAudio) { currentAudio.pause(); if (currentButton) currentButton.innerText = "Послушать"; }
+            currentAudio = new Audio(url); currentButton = btn; btn.innerText = "Пауза"; currentAudio.play();
+            currentAudio.onended = () => { btn.innerText = "Послушать"; currentAudio = null; currentButton = null; };
         }
         const button = document.getElementById('themeButton');
         button.addEventListener('click', () => {
             const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') {
-                document.documentElement.removeAttribute('data-theme');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-            }
+            if (currentTheme === 'light') { document.documentElement.removeAttribute('data-theme'); }
+            else { document.documentElement.setAttribute('data-theme', 'light'); }
         });
     </script>
 </body>
 </html>
+
