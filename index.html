@@ -40,6 +40,51 @@
             overflow-x: hidden;
             position: relative;
         }
+
+        /* Эстетичный белый прелоадер */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeOutScreen 0.5s ease-in-out 3s forwards;
+        }
+        #preloader img {
+            width: 140px;
+            height: 140px;
+            opacity: 0;
+            transform: scale(0.8);
+            filter: invert(0); /* Оставляем оригинальный черный цвет логотипа на белом фоне */
+            animation: crawlInLogo 1.5s ease-out 0.3s forwards;
+        }
+        @keyframes crawlInLogo {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes fadeOutScreen {
+            0% { opacity: 1; visibility: visible; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* Плавное выплывание самого сайта */
+        .main-content {
+            opacity: 0;
+            animation: fadeInSite 0.8s ease-in-out 3.2s forwards;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        @keyframes fadeInSite {
+            0% { opacity: 0; transform: translateY(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         #particles-canvas {
             position: fixed;
             top: 0;
@@ -290,132 +335,137 @@
     </style>
 </head>
 <body>
-    <canvas id="particles-canvas"></canvas>
-    <div class="container">
-        <div>
-            <button class="theme-toggle" id="themeButton">Сменить тему</button>
-            <button class="follow-btn" id="followBtn">+ Подписаться</button>
-        </div>
-        <div class="header-section">
-            <img src="images/logo.png" class="logo-img" alt="OIPASSS">
-            <div class="brand-info">
-                <h1>OIPASSS</h1>
-                <p class="bio">Официальное цифровое пространство артиста. Новые релизы и экспериментальный звук.</p>
-                <div class="followers-stats" id="followerStats" style="margin-top: 10px; font-size: 0.8rem; color: var(--sub-text);">Подписчиков: 0</div>
+    <div id="preloader">
+        <img src="images/logo.png" alt="OIPASSS">
+    </div>
+
+    <div class="main-content">
+        <canvas id="particles-canvas"></canvas>
+        <div class="container">
+            <div>
+                <button class="theme-toggle" id="themeButton">Сменить тему</button>
+                <button class="follow-btn" id="followBtn">+ Подписаться</button>
             </div>
-        </div>
-        <div class="section-title">Релизы</div>
-        <div class="releases" id="releasesContainer">
-            <div class="card pinned" id="card-avine">
-                <div class="card-main">
-                    <img src="images/avine.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Avine <span class="badge">Новый релиз</span><span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-avine">🎧 0</span></div>
+            <div class="header-section">
+                <img src="images/logo.png" class="logo-img" alt="OIPASSS">
+                <div class="brand-info">
+                    <h1>OIPASSS</h1>
+                    <p class="bio">Официальный сайт исполнителя.</p>
+                    <div class="followers-stats" id="followerStats" style="margin-top: 10px; font-size: 0.8rem; color: var(--sub-text);">Подписчиков: 0</div>
+                </div>
+            </div>
+            <div class="section-title">Релизы</div>
+            <div class="releases" id="releasesContainer">
+                <div class="card pinned" id="card-avine">
+                    <div class="card-main">
+                        <img src="images/avine.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Avine <span class="badge">Новый релиз</span><span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-avine">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Avine')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/avine.mp3', this, 'avine')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Avine')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/avine.mp3', this, 'avine')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-lastphoto">
-                <div class="card-main">
-                    <img src="images/lastphoto.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Last Photo<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-lastphoto">🎧 0</span></div>
+                <div class="card" id="card-lastphoto">
+                    <div class="card-main">
+                        <img src="images/lastphoto.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Last Photo<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-lastphoto">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Last Photo')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/lastphoto.mp3', this, 'lastphoto')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Last Photo')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/lastphoto.mp3', this, 'lastphoto')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-mambo">
-                <div class="card-main">
-                    <img src="images/mambo.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Mambo<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-mambo">🎧 0</span></div>
+                <div class="card" id="card-mambo">
+                    <div class="card-main">
+                        <img src="images/mambo.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Mambo<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-mambo">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Mambo')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/mambo.mp3', this, 'mambo')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Mambo')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/mambo.mp3', this, 'mambo')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-emptyroad">
-                <div class="card-main">
-                    <img src="images/emptyroad.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Empty Road<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-emptyroad">🎧 0</span></div>
+                <div class="card" id="card-emptyroad">
+                    <div class="card-main">
+                        <img src="images/emptyroad.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Empty Road<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-emptyroad">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Empty Road')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/emptyroad.mp3', this, 'emptyroad')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Empty Road')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/emptyroad.mp3', this, 'emptyroad')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-breath">
-                <div class="card-main">
-                    <img src="images/breath.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Breath<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-breath">🎧 0</span></div>
+                <div class="card" id="card-breath">
+                    <div class="card-main">
+                        <img src="images/breath.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Breath<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-breath">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Breath')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/breath.mp3', this, 'breath')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Breath')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/breath.mp3', this, 'breath')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-scarlet">
-                <div class="card-main">
-                    <img src="images/scarlet.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Scarlet<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-scarlet">🎧 0</span></div>
+                <div class="card" id="card-scarlet">
+                    <div class="card-main">
+                        <img src="images/scarlet.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Scarlet<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-scarlet">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Scarlet')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/scarlet.mp3', this, 'scarlet')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Scarlet')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/scarlet.mp3', this, 'scarlet')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-snowywind">
-                <div class="card-main">
-                    <img src="images/snowywind.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Snowy Wind<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-snowywind">🎧 0</span></div>
+                <div class="card" id="card-snowywind">
+                    <div class="card-main">
+                        <img src="images/snowywind.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Snowy Wind<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-snowywind">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Snowy Wind')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/snowywind.mp3', this, 'snowywind')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Snowy Wind')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/snowywind.mp3', this, 'snowywind')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-moonstone">
-                <div class="card-main">
-                    <img src="images/moonstone.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Moonstone<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-moonstone">🎧 0</span></div>
+                <div class="card" id="card-moonstone">
+                    <div class="card-main">
+                        <img src="images/moonstone.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Moonstone<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-moonstone">🎧 0</span></div>
+                        </div>
+                    </div>
+                    <div class="controls-wrapper">
+                        <button class="share-btn" onclick="shareTrack('Moonstone')">🔗</button>
+                        <button class="play-btn" onclick="playAudio('tracks/moonstone.mp3', this, 'moonstone')">Послушать</button>
                     </div>
                 </div>
-                <div class="controls-wrapper">
-                    <button class="share-btn" onclick="shareTrack('Moonstone')">🔗</button>
-                    <button class="play-btn" onclick="playAudio('tracks/moonstone.mp3', this, 'moonstone')">Послушать</button>
-                </div>
-            </div>
-            <div class="card" id="card-starryrush">
-                <div class="card-main">
-                    <img src="images/starryrush.png" class="card-cover" onerror="this.src='images/logo.png'">
-                    <div class="card-info">
-                        <div class="card-title">Starry Rush<span class="trend-zone"></span></div>
-                        <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-starryrush">🎧 0</span></div>
+                <div class="card" id="card-starryrush">
+                    <div class="card-main">
+                        <img src="images/starryrush.png" class="card-cover" onerror="this.src='images/logo.png'">
+                        <div class="card-info">
+                            <div class="card-title">Starry Rush<span class="trend-zone"></span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-starryrush">🎧 0</span></div>
                     </div>
                 </div>
                 <div class="controls-wrapper">
@@ -442,6 +492,7 @@
                 <div class="target-node" id="targetNode">Цель: 10</div>
             </div>
         </div>
+    </div>
     </div>
     <script>
         const canvas = document.getElementById('particles-canvas');
@@ -480,7 +531,7 @@
         let totalLikes = baseLikes + (userHasLiked ? 1 : 0);
 
         let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
-        let followersCount = 142 + (userHasFollowed ? 1 : 0);
+        let followersCount = 0 + (userHasFollowed ? 1 : 0);
 
         const heartBtn = document.getElementById('heartBtn');
         const liquid = document.getElementById('liquid');
@@ -491,7 +542,7 @@
         const container = document.getElementById('releasesContainer');
 
         let streams = JSON.parse(localStorage.getItem('oipasss_streams')) || {
-            lastphoto: 45, mambo: 89, emptyroad: 12, breath: 67, scarlet: 23, snowywind: 5, moonstone: 54, starryrush: 31, avine: 105
+            lastphoto: 0, mambo: 0, emptyroad: 0, breath: 0, scarlet: 0, snowywind: 0, moonstone: 0, starryrush: 0, avine: 0
         };
 
         function getTarget(currentLikes) {
@@ -550,10 +601,11 @@
             });
 
             if (sortableCards.length > 0) {
-                const topId = sortableCards[0].id.replace('card-', '');
+                const topCard = sortableCards[0];
+                const topId = topCard.id.replace('card-', '');
                 if (streams[topId] > 0) {
-                    sortableCards[0].classList.add('top-trending');
-                    const trendZone = sortableCards[0].querySelector('.trend-zone');
+                    topCard.classList.add('top-trending');
+                    const trendZone = topCard.querySelector('.trend-zone');
                     if (trendZone) trendZone.innerHTML = '<span class="badge trend-badge">🔥 ТРЕНД</span>';
                 }
             }
@@ -584,11 +636,11 @@
             navigator.clipboard.writeText(shareText).then(() => {
                 alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
             }).catch(() => {
-                alert('Не удалось скопировать ссылку автоматически. Скопируй адресную строку сайта.');
+                alert('Не удалось копировать ссылку.');
             });
         }
 
-        let currentAudio = null, currentButton = null, currentTrackId = null;
+        let currentAudio = null, currentButton = null;
         let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
 
         function playAudio(url, btn, trackId) {
@@ -622,5 +674,7 @@
     </script>
 </body>
 </html>
+
+
 
 
