@@ -13,9 +13,8 @@
             --sub-text: #777777;
             --badge-bg: #ffffff;
             --badge-color: #000000;
-            --particle-color: rgba(255, 255, 255, 0.4);
-            --flask-border: #ffffff;
-            --flask-fill: #ffffff;
+            --particle-color: rgba(255, 255, 255, 0.25);
+            --flask-color: #ffffff;
         }
         [data-theme="light"] {
             --bg-color: #ffffff;
@@ -25,9 +24,8 @@
             --sub-text: #666666;
             --badge-bg: #000000;
             --badge-color: #ffffff;
-            --particle-color: rgba(0, 0, 0, 0.3);
-            --flask-border: #000000;
-            --flask-fill: #000000;
+            --particle-color: rgba(0, 0, 0, 0.2);
+            --flask-color: #000000;
         }
         body {
             background-color: var(--bg-color);
@@ -78,9 +76,8 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: #ffffff;
-            padding: 3px;
-            box-sizing: border-box;
+            background: transparent;
+            object-fit: cover;
             transition: filter 0.3s;
         }
         [data-theme="light"] .logo-img {
@@ -206,7 +203,6 @@
         .card:hover .play-btn {
             background: var(--text-color);
             color: var(--bg-color);
-            border-color: var(--text-color);
         }
         .custom-like-container {
             border: 1px solid var(--card-border);
@@ -218,61 +214,30 @@
             align-items: center;
             gap: 25px;
             box-sizing: border-box;
-            transition: all 0.3s;
         }
-        .flask-wrapper {
-            position: relative;
+        .flask-svg-wrapper {
             width: 50px;
             height: 70px;
             flex-shrink: 0;
         }
-        .flask {
-            width: 100%;
-            height: 100%;
-            border: 3px solid var(--flask-border);
-            border-radius: 6px 6px 24px 24px;
-            position: relative;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-        .flask::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 35%;
-            width: 30%;
-            height: 25%;
-            border-bottom: 3px solid var(--flask-border);
-            border-left: 3px solid var(--flask-border);
-            border-right: 3px solid var(--flask-border);
-            box-sizing: border-box;
-        }
-        .flask-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            background-color: var(--flask-fill);
-            transition: height 0.5s ease;
-        }
         .like-controls {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 3px;
         }
         .heart-btn {
             background: none;
             border: none;
-            font-size: 2rem;
+            font-size: 2.2rem;
             cursor: pointer;
             padding: 0;
             width: max-content;
             color: var(--text-color);
-            transition: transform 0.1s;
+            transition: transform 0.1s, color 0.2s;
+            line-height: 1;
         }
-        .heart-btn:active {
-            transform: scale(1.2);
+        .heart-btn:disabled {
+            cursor: default;
         }
         .like-stats {
             font-size: 0.85rem;
@@ -291,110 +256,116 @@
     <div class="container">
         <button class="theme-toggle" id="themeButton">Сменить тему</button>
         <div class="header-section">
-            <img src="https://imgur.com" class="logo-img" alt="OIPASSS">
+            <img src="images/logo.png" class="logo-img" alt="OIPASSS">
             <div class="brand-info">
                 <h1>OIPASSS</h1>
-                <p class="bio">Официальное цифровое пространство артиста. Новые релизы и экспериментальный звук.</p>
+                <p class="bio">Официальный сайт исполнителя</p>
             </div>
         </div>
         <div class="section-title">Релизы</div>
         <div class="releases">
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/avine.jpg" class="card-cover" onerror="this.src='var(--card-border)'">
                     <div class="card-info">
                         <div class="card-title">Avine <span class="badge">Новый релиз</span></div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/avine.mp3', this)">Послушать отрывок</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/lastphoto.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Last Photo</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/lastphoto.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/mambo.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Mambo</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/mambo.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/emptyroad.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Empty Road</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/emptyroad.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/breath.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Breath</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/breath.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/scarlet.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Scarlet</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/scarlet.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/snowywind.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Snowy Wind</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/snowywind.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/moonstone.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Moonstone</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/moonstone.mp3', this)">Послушать</button>
             </div>
             <div class="card">
                 <div class="card-main">
-                    <img src="https://yandex.net" class="card-cover">
+                    <img src="images/starryrush.jpg" class="card-cover" onerror="this.src='images/logo.png'">
                     <div class="card-info">
                         <div class="card-title">Starry Rush</div>
                         <div class="card-type">Сингл</div>
                     </div>
                 </div>
-                <button class="play-btn" onclick="playAudio('https://google.com', this)">Послушать</button>
+                <button class="play-btn" onclick="playAudio('tracks/starryrush.mp3', this)">Послушать</button>
             </div>
         </div>
         <div class="custom-like-container">
-            <div class="flask-wrapper">
-                <div class="flask">
-                    <div class="flask-fill" id="flaskFill"></div>
-                </div>
+            <div class="flask-svg-wrapper">
+                <svg viewBox="0 0 60 80" width="100%" height="100%">
+                    <defs>
+                        <mask id="flask-mask">
+                            <path d="M 25 5 L 35 5 L 35 25 L 55 55 A 15 15 0 0 1 40 75 L 20 75 A 15 15 0 0 1 5 55 L 25 25 Z" fill="white" />
+                        </mask>
+                    </defs>
+                    <rect id="liquid" x="0" y="80" width="60" height="80" fill="var(--flask-color)" mask="url(#flask-mask)" style="transition: y 0.6s ease-in-out;" />
+                    <path d="M 25 5 L 35 5 L 35 25 L 55 55 A 15 15 0 0 1 40 75 L 20 75 A 15 15 0 0 1 5 55 L 25 25 Z" fill="none" stroke="var(--flask-color)" stroke-width="3" stroke-linejoin="round" />
+                </svg>
             </div>
             <div class="like-controls">
                 <button class="heart-btn" id="heartBtn">♡</button>
@@ -415,56 +386,69 @@
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.4 - 0.2;
-                this.speedY = Math.random() * 0.4 - 0.2;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.speedY = Math.random() * 0.3 - 0.15;
             }
             update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
             }
             draw() {
                 ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
             }
         }
-        function initParticles() { for (let i = 0; i < 40; i++) particles.push(new Particle()); }
+        function initParticles() { for (let i = 0; i < 35; i++) particles.push(new Particle()); }
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animateParticles);
         }
-        initParticles();
-        animateParticles();
+        initParticles(); animateParticles();
 
-        let likes = parseInt(localStorage.getItem('oipasss_likes')) || 0;
+        let baseLikes = 0;
+        let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
+        let totalLikes = baseLikes + (userHasLiked ? 1 : 0);
+
         const heartBtn = document.getElementById('heartBtn');
-        const flaskFill = document.getElementById('flaskFill');
+        const liquid = document.getElementById('liquid');
         const likeStats = document.getElementById('likeStats');
         const targetNode = document.getElementById('targetNode');
+
         function getTarget(currentLikes) {
             if (currentLikes < 10) return 10;
             if (currentLikes < 100) return 100;
             if (currentLikes < 1000) return 1000;
             return Math.pow(10, Math.floor(Math.log10(currentLikes)) + 1);
         }
+
         function updateLikesUI() {
-            const target = getTarget(likes);
-            likeStats.innerText = `Лайков: ${likes}`;
+            const target = getTarget(totalLikes);
+            likeStats.innerText = `Лайков: ${totalLikes}`;
             targetNode.innerText = `Цель: ${target}`;
-            const percentage = Math.min((likes / target) * 100, 100);
-            flaskFill.style.height = `${percentage}%`;
-            heartBtn.innerText = likes > 0 ? '♥' : '♡';
+            
+            const percentage = Math.min((totalLikes / target) * 100, 100);
+            const yPosition = 80 - (80 * (percentage / 100));
+            liquid.setAttribute('y', yPosition);
+
+            if (userHasLiked) {
+                heartBtn.innerText = '♥';
+                heartBtn.style.color = 'var(--flask-color)';
+                heartBtn.disabled = true;
+            } else {
+                heartBtn.innerText = '♡';
+                heartBtn.disabled = false;
+            }
         }
+
         heartBtn.addEventListener('click', () => {
-            likes++;
-            localStorage.setItem('oipasss_likes', likes);
-            updateLikesUI();
+            if (!userHasLiked) {
+                userHasLiked = true;
+                totalLikes++;
+                localStorage.setItem('oipasss_voted', 'true');
+                updateLikesUI();
+            }
         });
         updateLikesUI();
 
