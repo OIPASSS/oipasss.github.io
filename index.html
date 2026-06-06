@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OIPASSS</title>
     <style>
@@ -349,6 +350,7 @@
     <p class="bio">
         Официальный сайт OIPASSS.
         <button class="theme-toggle" id="infoButton" style="margin-left: 10px; margin-bottom: 0;">Инфо</button>
+        <button class="theme-toggle" id="installPwaBtn" style="display: none; margin-left: 10px; margin-bottom: 0; border-color: #00ff00; color: #00ff00;">Установить на экран</button>
         <span id="extraBio" style="display: none; margin-top: 15px; width: 100%;">
             <br>
             Я OIPASSS, и сейчас музыка для меня — это не просто увлечение, а способ выплеснуть всё, 
@@ -650,6 +652,36 @@
                 }
             });
         }
+        let deferredPrompt;
+        const installPwaBtn = document.getElementById('installPwaBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installPwaBtn) {
+                installPwaBtn.style.display = 'inline-block';
+            }
+        });
+
+        if (installPwaBtn) {
+            installPwaBtn.addEventListener('click', () => {
+                if (!deferredPrompt) return;
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA install');
+                    }
+                    deferredPrompt = null;
+                    installPwaBtn.style.display = 'none';
+                });
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (installPwaBtn) installPwaBtn.style.display = 'none';
+            deferredPrompt = null;
+        });
+
         db.ref('stats/streams').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && typeof data === 'object') {
