@@ -672,12 +672,24 @@
             btn.innerText = "Пауза";
             window.currentAudio.play();
 
-            window.listenTimer = setTimeout(() => {
-                if (db) {
-                    db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
-                }
-                window.listenTimer = null;
-            }, 10000);
+            
+            const startTrackTimer = () => {
+                if (window.listenTimer) { clearTimeout(window.listenTimer); }
+                window.listenTimer = setTimeout(() => {
+                    if (db) {
+                        db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
+                    }
+                    window.listenTimer = null;
+                }, 10000);
+            };
+
+           
+            startTrackTimer();
+
+            
+            window.currentAudio.onseeked = () => {
+                startTrackTimer();
+            };
 
 
             window.currentAudio.onended = () => {
@@ -724,7 +736,6 @@
             });
         }
 
-        // Принудительный запуск сортировки чарта сразу после привязки кнопок
         sortChart();
     </script>
 </body>
