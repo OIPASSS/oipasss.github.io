@@ -525,15 +525,17 @@
             requestAnimationFrame(animateParticles);
         }
         initParticles(); animateParticles();
+        
         const firebaseConfig = {
             apiKey: "AIzaSyBIkEe_9Qsw8yPIH4ilFc9lbVNSC76KHtw",
-            authDomain: "://oipasss.firebaseapp.com",
-            databaseURL: "https://oipasss-defaut-rtdb.firebaseio.com"
+            authDomain: "oipasss.firebaseapp.com",
+            databaseURL: "https://oipasss-defaut-rtdb.firebaseio.com",
             projectId: "oipasss",
             storageBucket: "oipasss.firebasestorage.app",
             messagingSenderId: "600072677650",
             appId: "1:600072677650:web:98df6f60bed76a15db2bcb"
         };
+
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -634,14 +636,17 @@
                 userHasLiked = true;
                 localStorage.setItem('oipasss_voted', 'true');
                 db.ref('stats/totalLikes').transaction(current => (current || 0) + 1);
+            }
         });
 
         followBtn.addEventListener('click', () => {
             if (!userHasFollowed && db) {
                 userHasFollowed = true;
                 localStorage.setItem('oipasss_followed', 'true');
-               db.ref('stats/followersCount').transaction(current => (current || 0) + 1);
+                db.ref('stats/followersCount').transaction(current => (current || 0) + 1);
+            }
         });
+
         window.currentAudio = null;
         window.currentButton = null;
         window.currentTrackId = null;
@@ -723,6 +728,9 @@
                 else { document.documentElement.setAttribute('data-theme', 'light'); }
             });
         }
+
+        // Принудительный запуск сортировки чарта сразу после привязки кнопок
+        sortChart();
     </script>
 </body>
 </html>
