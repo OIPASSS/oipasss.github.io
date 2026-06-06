@@ -525,10 +525,10 @@
             requestAnimationFrame(animateParticles);
         }
         initParticles(); animateParticles();
-        const firebaseConfig = {
+                const firebaseConfig = {
             apiKey: "AIzaSyBIkEe_9Qsw8yPIH4ilFc9lbVNSC76KHtw",
             authDomain: "://firebaseapp.com",
-            databaseURL: "https://oipasss-default-rtdb.firebaseio.com",
+            databaseURL: "https://firebaseio.com",
             projectId: "oipasss",
             storageBucket: "oipasss.firebasestorage.app",
             messagingSenderId: "600072677650",
@@ -540,7 +540,7 @@
 
         let totalLikes = 0;
         let followersCount = 0;
-        let streams = { lastphoto: 0, mambo: 0, emptyroad: 0, breath: 0, scarlet: 0, snowywind: 0, moonstone: 0, starryrush: 0, avine: 0 };
+        let streams = { lastphoto: 1, mambo: 1, emptyroad: 3, breath: 1, scarlet: 1, snowywind: 1, moonstone: 1, starryrush: 1, avine: 1 };
 
         let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
         let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
@@ -625,8 +625,17 @@
         });
         db.ref('stats/streams').on('value', (snapshot) => {
             const data = snapshot.val() || {};
+            let hasData = false;
             for (let key in streams) {
-                streams[key] = data[key] || 0;
+                if (data[key] !== undefined) {
+                    streams[key] = data[key];
+                    hasData = true;
+                }
+            }
+            if (!hasData) {
+                for (let key in streams) {
+                    db.ref(`stats/streams/${key}`).transaction(current => current === null ? streams[key] : current);
+                }
             }
             sortChart();
         });
