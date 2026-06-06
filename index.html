@@ -357,7 +357,7 @@
                         <img src="images/avine.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Avine <span class="badge">Новый релиз</span><span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-avine">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-avine"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -370,7 +370,7 @@
                         <img src="images/lastphoto.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Last Photo<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-lastphoto">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-lastphoto"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -383,7 +383,7 @@
                         <img src="images/mambo.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Mambo<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-mambo">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-mambo"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -396,7 +396,7 @@
                         <img src="images/emptyroad.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Empty Road<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-emptyroad">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-emptyroad"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -409,7 +409,7 @@
                         <img src="images/breath.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Breath<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-breath">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-breath"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -422,7 +422,7 @@
                         <img src="images/scarlet.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Scarlet<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-scarlet">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-scarlet"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -435,7 +435,7 @@
                         <img src="images/snowywind.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Snowy Wind<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-snowywind">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-snowywind"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -448,7 +448,7 @@
                         <img src="images/moonstone.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Moonstone<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-moonstone">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-moonstone"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -461,7 +461,7 @@
                         <img src="images/starryrush.png" class="card-cover" onerror="this.src='images/logo.png'">
                         <div class="card-info">
                             <div class="card-title">Starry Rush<span class="trend-zone"></span></div>
-                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-starryrush">🎧 0</span></div>
+                            <div class="card-stats"><span class="card-type">Сингл</span><span class="streams-count" id="stream-starryrush"></span></div>
                         </div>
                     </div>
                     <div class="controls-wrapper">
@@ -591,7 +591,7 @@
         function sortChart() {
             let cards = Array.from(container.getElementsByClassName('card'));
             cards.forEach(card => {
-                const id = card.id.replace('card-', '');
+                const id = card.getAttribute('data-id');
                 const streamElement = document.getElementById(`stream-${id}`);
                 if (streamElement) streamElement.innerText = `🎧 ${streams[id] || 0}`;
                 const trendZone = card.querySelector('.trend-zone');
@@ -600,13 +600,13 @@
             });
             let sortableCards = cards.filter(card => !card.classList.contains('pinned'));
             sortableCards.sort((a, b) => {
-                const idA = a.id.replace('card-', '');
-                const idB = b.id.replace('card-', '');
+                const idA = a.getAttribute('data-id');
+                const idB = b.getAttribute('data-id');
                 return (streams[idB] || 0) - (streams[idA] || 0);
             });
             if (sortableCards.length > 0) {
                 const topCard = sortableCards[0];
-                const topId = topCard.id.replace('card-', '');
+                const topId = topCard.getAttribute('data-id');
                 if ((streams[topId] || 0) > 0) {
                     topCard.classList.add('top-trending');
                     const trendZone = topCard.querySelector('.trend-zone');
