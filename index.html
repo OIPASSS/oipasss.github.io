@@ -351,8 +351,14 @@
         Официальный сайт OIPASSS.
         <button class="theme-toggle" id="infoButton" style="margin-left: 10px; margin-bottom: 0;">Инфо</button>
         <button class="theme-toggle" id="installPwaBtn" style="display: none; margin-left: 10px; margin-bottom: 0;">Установить на экран</button>
-        <a href="https://yoomoney.ru/transfe/quickpay?to=4100119548087424" target="_blank" class="theme-toggle" style="margin-left: 10px; margin-bottom: 0; text-decoration: none; display: inline-block;">Поддержать</a>
-        <span id="extraBio" style="display: none; margin-top: 15px; width: 100%;">
+        <form method="POST" action="https://yoomoney.ru/quickpay/confirm" target="_blank" style="display: inline-block; margin-left: 10px; margin-bottom: 0; padding: 0; border: none; background: none;">
+             <input type="hidden" name="receiver" value="410011854087424">
+             <input type="hidden" name="quickpay-form" value="button">
+             <input type="hidden" name="targets" value="OIPASSS — Поддержка артиста">
+             <input type="submit" class="theme-toggle" value="Поддержать" style="cursor: pointer;">
+    </form>
+    
+    <span id="extraBio" style="display: none; margin-top: 15px; width: 100%;">
             <br>
             Я OIPASSS, и сейчас музыка для меня — это не просто увлечение, а способ выплеснуть всё, 
             что накопилось внутри. Я не пытаюсь подстраиваться под чьи-то рамки. 
