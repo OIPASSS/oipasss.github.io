@@ -672,16 +672,13 @@
             btn.innerText = "Пауза";
             window.currentAudio.play();
 
-            if (!window.countedTracks[trackId]) {
-                window.listenTimer = setTimeout(() => {
-                    window.countedTracks[trackId] = true;
-                    localStorage.setItem('oipasss_counted_tracks', JSON.stringify(window.countedTracks));
-                    if (db) {
-                        db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
-                    }
-                    window.listenTimer = null;
-                }, 10000);
-            }
+            window.listenTimer = setTimeout(() => {
+                if (db) {
+                    db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
+                }
+                window.listenTimer = null;
+            }, 10000);
+
 
             window.currentAudio.onended = () => {
                 btn.innerText = "Послушать";
