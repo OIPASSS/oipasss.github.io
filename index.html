@@ -546,8 +546,7 @@
 
         let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
         let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
-        let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
-
+        window.countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
         const heartBtn = document.getElementById('heartBtn');
         const liquid = document.getElementById('liquid');
         const likeStats = document.getElementById('likeStats');
@@ -673,10 +672,10 @@
             btn.innerText = "Пауза";
             window.currentAudio.play();
 
-            if (!countedTracks[trackId]) {
+            if (!window.countedTracks[trackId]) {
                 window.listenTimer = setTimeout(() => {
-                    countedTracks[trackId] = true;
-                    localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
+                    window.countedTracks[trackId] = true;
+                    localStorage.setItem('oipasss_counted_tracks', JSON.stringify(window.countedTracks));
                     if (db) {
                         db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
                     }
@@ -700,23 +699,22 @@
             });
         }
 
-        // привязка кликов ко всем кнопкам на странице
+     // привязка кликов, которая никогда не слетит при сортировке
         document.querySelectorAll('.card').forEach(card => {
-           const trackId = card.getAttribute('data-id');
+            const trackId = card.getAttribute('data-id');
             const playBtn = card.querySelector('.play-btn');
             const shareBtn = card.querySelector('.share-btn');
             
-            // Пытаемся взять пути из старой структуры или по дефолту
             const trackUrl = `tracks/${trackId}.mp3`;
-            const trackName = card.querySelector('.card-title').innerText.replace('Новый релиз', '').replace('🔥 ТРЕНД', '').trim();
+            const titleEl = card.querySelector('.card-title');
+            let trackName = titleEl ? titleEl.textContent : '';
+            trackName = trackName.replace('Новый релиз', '').replace('🔥 ТРЕНД', '').trim();
 
             if (playBtn) {
-                playBtn.removeAttribute('onclick'); // Очищаем старые onclick, если они остались
-                playBtn.addEventListener('click', () => window.playAudio(trackUrl, playBtn, trackId));
+                playBtn.onclick = () => window.playAudio(trackUrl, playBtn, trackId);
             }
             if (shareBtn) {
-                shareBtn.removeAttribute('onclick');
-                shareBtn.addEventListener('click', () => window.shareTrack(trackName));
+                shareBtn.onclick = () => window.shareTrack(trackName);
             }
         });
 
