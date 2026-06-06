@@ -1,69 +1,66 @@
-    <script>
-        const script1 = document.createElement('script');
-        script1.src = "https://gstatic.com";
-        const script2 = document.createElement('script');
-        script2.src = "https://gstatic.com";
-        document.head.appendChild(script1);
-        document.head.appendChild(script2);
-
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = Math.random() * 0.3 - 0.15;
-                this.speedY = Math.random() * 0.3 - 0.15;
-            }
-            update() {
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
+<script src="https://gstatic.com"></script>
+<script src="https://gstatic.com"></script>
+<script>
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.3 - 0.15;
+            this.speedY = Math.random() * 0.3 - 0.15;
         }
-        function initParticles() { for (let i = 0; i < 35; i++) particles.push(new Particle()); }
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animateParticles);
+        update() {
+            this.x += this.speedX; this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0; if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0; if (this.y < 0) this.y = canvas.height;
         }
-        initParticles(); animateParticles();
+        draw() {
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--particle-color').trim();
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+        }
+    }
+    function initParticles() { for (let i = 0; i < 35; i++) particles.push(new Particle()); }
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+    initParticles(); animateParticles();
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBIkEe_9Qsw8yPIH4ilFc9lbVNSC76KHtw",
-            authDomain: "://firebaseapp.com",
-            databaseURL: "https://firebaseio.com",
-            projectId: "oipasss",
-            storageBucket: "oipasss.firebasestorage.app",
-            messagingSenderId: "600072677650",
-            appId: "1:600072677650:web:98df6f60bed76a15db2bcb"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyBIkEe_9Qsw8yPIH4ilFc9lbVNSC76KHtw",
+        authDomain: "://firebaseapp.com",
+        databaseURL: "https://firebaseio.com",
+        projectId: "oipasss",
+        storageBucket: "oipasss.firebasestorage.app",
+        messagingSenderId: "600072677650",
+        appId: "1:600072677650:web:98df6f60bed76a15db2bcb"
+    };
 
-        let db;
-        let totalLikes = 0;
-        let followersCount = 0;
-        let streams = { lastphoto: 0, mambo: 0, emptyroad: 0, breath: 0, scarlet: 0, snowywind: 0, moonstone: 0, starryrush: 0, avine: 0 };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-        let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
-        let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
-        let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
+    let totalLikes = 0;
+    let followersCount = 0;
+    let streams = { lastphoto: 0, mambo: 0, emptyroad: 0, breath: 0, scarlet: 0, snowywind: 0, moonstone: 0, starryrush: 0, avine: 0 };
 
-        const heartBtn = document.getElementById('heartBtn');
-        const liquid = document.getElementById('liquid');
-        const likeStats = document.getElementById('likeStats');
-        const targetNode = document.getElementById('targetNode');
-        const followBtn = document.getElementById('followBtn');
-        const followerStats = document.getElementById('followerStats');
-        const container = document.getElementById('releasesContainer');
+    let userHasLiked = localStorage.getItem('oipasss_voted') === 'true';
+    let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
+    let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
+
+    const heartBtn = document.getElementById('heartBtn');
+    const liquid = document.getElementById('liquid');
+    const likeStats = document.getElementById('likeStats');
+    const targetNode = document.getElementById('targetNode');
+    const followBtn = document.getElementById('followBtn');
+    const followerStats = document.getElementById('followerStats');
+    const container = document.getElementById('releasesContainer');
         function getTarget(currentLikes) {
             if (currentLikes < 10) return 10;
             if (currentLikes < 100) return 100;
@@ -126,36 +123,21 @@
             sortableCards.forEach(card => container.appendChild(card));
         }
 
-        function initFirebaseLogic() {
-            db = firebase.database();
-            db.ref('stats/totalLikes').on('value', (snapshot) => {
-                totalLikes = snapshot.val() || 0;
-                updateLikesUI();
-            });
-            db.ref('stats/followersCount').on('value', (snapshot) => {
-                followersCount = snapshot.val() || 0;
-                updateFollowUI();
-            });
-            db.ref('stats/streams').on('value', (snapshot) => {
-                const data = snapshot.val() || {};
-                for (let key in streams) {
-                    streams[key] = data[key] || 0;
-                }
-                sortChart();
-            });
-        }
-
-        function checkFirebaseLoaded() {
-            if (typeof firebase !== 'undefined' && typeof firebase.database === 'function') {
-                if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
-                }
-                initFirebaseLogic();
-            } else {
-                setTimeout(checkFirebaseLoaded, 100);
+        db.ref('stats/totalLikes').on('value', (snapshot) => {
+            totalLikes = snapshot.val() || 0;
+            updateLikesUI();
+        });
+        db.ref('stats/followersCount').on('value', (snapshot) => {
+            followersCount = snapshot.val() || 0;
+            updateFollowUI();
+        });
+        db.ref('stats/streams').on('value', (snapshot) => {
+            const data = snapshot.val() || {};
+            for (let key in streams) {
+                streams[key] = data[key] || 0;
             }
-        }
-        script2.onload = checkFirebaseLoaded;
+            sortChart();
+        });
         heartBtn.addEventListener('click', () => {
             if (!userHasLiked && db) {
                 userHasLiked = true;
@@ -172,19 +154,19 @@
             }
         });
 
-        function shareTrack(trackName) {
+        window.shareTrack = function(trackName) {
             const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
             navigator.clipboard.writeText(shareText).then(() => {
                 alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
             }).catch(() => {
                 alert('Не удалось копировать ссылку.');
             });
-        }
+        };
 
         let currentAudio = null, currentButton = null, currentTrackId = null;
         let listenTimer = null;
 
-        function playAudio(url, btn, trackId) {
+        window.playAudio = function(url, btn, trackId) {
             if (currentAudio && currentButton === btn) {
                 currentAudio.pause();
                 currentAudio = null;
@@ -222,7 +204,7 @@
                 currentButton = null;
                 if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
             };
-        }
+        };
 
         const button = document.getElementById('themeButton');
         button.addEventListener('click', () => {
