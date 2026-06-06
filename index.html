@@ -625,16 +625,9 @@
         });
         db.ref('stats/streams').on('value', (snapshot) => {
             const data = snapshot.val() || {};
-            let hasData = false;
             for (let key in streams) {
-                if (data[key] !== undefined) {
+                if (data[key] !== undefined && data[key] !== null) {
                     streams[key] = data[key];
-                    hasData = true;
-                }
-            }
-            if (!hasData) {
-                for (let key in streams) {
-                    db.ref(`stats/streams/${key}`).transaction(current => current === null ? streams[key] : current);
                 }
             }
             sortChart();
