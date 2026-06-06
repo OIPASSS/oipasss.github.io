@@ -547,13 +547,17 @@
         let userHasFollowed = localStorage.getItem('oipasss_followed') === 'true';
         let countedTracks = JSON.parse(localStorage.getItem('oipasss_counted_tracks')) || {};
 
-        const heartBtn = document.getElementById('heartBtn');
-        const liquid = document.getElementById('liquid');
-        const likeStats = document.getElementById('likeStats');
-        const targetNode = document.getElementById('targetNode');
-        const followBtn = document.getElementById('followBtn');
-        const followerStats = document.getElementById('followerStats');
-        const container = document.getElementById('releasesContainer');
+        let heartBtn, liquid, likeStats, targetNode, followBtn, followerStats, container;
+
+        function initElements() {
+            heartBtn = document.getElementById('heartBtn');
+            liquid = document.getElementById('liquid');
+            likeStats = document.getElementById('likeStats');
+            targetNode = document.getElementById('targetNode');
+            followBtn = document.getElementById('followBtn');
+            followerStats = document.getElementById('followerStats');
+            container = document.getElementById('releasesContainer');
+        }
 
         function getTarget(currentLikes) {
             if (currentLikes < 10) return 10;
@@ -563,6 +567,7 @@
         }
 
         function updateLikesUI() {
+            if (!heartBtn || !liquid || !likeStats || !targetNode) return;
             const target = getTarget(totalLikes);
             likeStats.innerText = `Лайков: ${totalLikes}`;
             targetNode.innerText = `Цель: ${target}`;
@@ -579,6 +584,7 @@
         }
 
         function updateFollowUI() {
+            if (!followerStats || !followBtn) return;
             followerStats.innerText = `Подписчиков: ${followersCount}`;
             if (userHasFollowed) {
                 followBtn.innerText = 'Вы подписаны';
@@ -589,6 +595,7 @@
             }
         }
         function sortChart() {
+            if (!container) return;
             let cards = Array.from(container.getElementsByClassName('card'));
             cards.forEach(card => {
                 const id = card.getAttribute('data-id');
@@ -616,114 +623,131 @@
             sortableCards.forEach(card => container.appendChild(card));
         }
 
-        onValue(ref(db, 'stats/totalLikes'), (snapshot) => {
-            totalLikes = snapshot.val() || 0;
-            updateLikesUI();
-        });
+        window.addEventListener('DOMContentLoaded', () => {
+            initElements();
+            
+            onValue(ref(db, 'stats/totalLikes'), (snapshot) => {
+                totalLikes = snapshot.val() || 0;
+                updateLikesUI();
+            });
 
-        onValue(ref(db, 'stats/followersCount'), (snapshot) => {
-            followersCount = snapshot.val() || 0;
-            updateFollowUI();
-        });
+            onValue(ref(db, 'stats/followersCount'), (snapshot) => {
+                followersCount = snapshot.val() || 0;
+                updateFollowUI();
+            });
 
-        onValue(ref(db, 'stats/streams'), (snapshot) => {
-            const data = snapshot.val();
-            if (data && typeof data === 'object') {
-                for (let key in streams) {
-                    if (data[key] !== undefined && data[key] !== null) {
-                        streams[key] = data[key];
+            onValue(ref(db, 'stats/streams'), (snapshot) => {
+                const data = snapshot.val();
+                if (data && typeof data === 'object') {
+                    for (let key in streams) {
+                        if (data[key] !== undefined && data[key] !== null) {
+                            streams[key] = data[key];
+                        }
                     }
                 }
-            }
-            sortChart();
+                sortChart();
+            });
+
+            initAppControls();
         });
-        heartBtn.addEventListener('click', () => {
-            if (!userHasLiked) {
-                userHasLiked = true;
-                localStorage.setItem('oipasss_voted', 'true');
-                runTransaction(ref(db, 'stats/totalLikes'), (current) => (current || 0) + 1);
-            }
-        });
-
-        followBtn.addEventListener('click', () => {
-            if (!userHasFollowed) {
-                userHasFollowed = true;
-                localStorage.setItem('oipasss_followed', 'true');
-                runTransaction(ref(db, 'stats/followersCount'), (current) => (current || 0) + 1);
-            }
-        });
-
-        let currentAudio = null, currentButton = null, currentTrackId = null;
-        let listenTimer = null;
-
-        function playAudio(url, btn, trackId) {
-            if (currentAudio && currentButton === btn) {
-                currentAudio.pause();
-                currentAudio = null;
-                btn.innerText = "Послушать";
-                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
-                return;
+        function initAppControls() {
+            if (heartBtn) {
+                heartBtn.addEventListener('click', () => {
+                    if (!userHasLiked) {
+                        userHasLiked = true;
+                        localStorage.setItem('oipasss_voted', 'true');
+                        runTransaction(ref(db, 'stats/totalLikes'), (current) => (current || 0) + 1);
+                    }
+                });
             }
 
-            if (currentAudio) {
-                currentAudio.pause();
-                if (currentButton) currentButton.innerText = "Послушать";
-                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+            if (followBtn) {
+                followBtn.addEventListener('click', () => {
+                    if (!userHasFollowed) {
+                        userHasFollowed = true;
+                        localStorage.setItem('oipasss_followed', 'true');
+                        runTransaction(ref(db, 'stats/followersCount'), (current) => (current || 0) + 1);
+                    }
+                });
+            }
+
+            let currentAudio = null, currentButton = null, currentTrackId = null;
+            let listenTimer = null;
+
+            function playAudio(url, btn, trackId) {
+                if (currentAudio && currentButton === btn) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                    btn.innerText = "Послушать";
+                    if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+                    return;
+                }
+
+                if (currentAudio) {
+                    currentAudio.pause();
+                    if (currentButton) currentButton.innerText = "Послушать";
+                    if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+                }
+                
+                currentAudio = new Audio(url);
+                currentButton = btn;
+                currentTrackId = trackId;
+                btn.innerText = "Пауза";
+                currentAudio.play();
+
+                if (!countedTracks[trackId]) {
+                    listenTimer = setTimeout(() => {
+                        countedTracks[trackId] = true;
+                        localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
+                        runTransaction(ref(db, `stats/streams/${trackId}`), (current) => (current || 0) + 1);
+                        listenTimer = null;
+                    }, 10000);
+                }
+
+                currentAudio.onended = () => {
+                    btn.innerText = "Послушать";
+                    currentAudio = null;
+                    currentButton = null;
+                    if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
+                };
+            }
+
+            function shareTrack(trackName) {
+                const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
+                }).catch(() => {
+                    alert('Не удалось копировать ссылку.');
+                });
+            }
+
+            document.querySelectorAll('.card').forEach(card => {
+                const trackId = card.getAttribute('data-id');
+                const trackUrl = card.getAttribute('data-url');
+                const trackName = card.getAttribute('data-name');
+                const playBtn = card.querySelector('.play-btn');
+                const shareBtn = card.querySelector('.share-btn');
+
+                if (playBtn) {
+                    playBtn.addEventListener('click', () => playAudio(trackUrl, playBtn, trackId));
+                }
+                if (shareBtn) {
+                    shareBtn.addEventListener('click', () => shareTrack(trackName));
+                }
+            });
+
+            const button = document.getElementById('themeButton');
+            if (button) {
+                button.addEventListener('click', () => {
+                    const currentTheme = document.documentElement.getAttribute('data-theme');
+                    if (currentTheme === 'light') { document.documentElement.removeAttribute('data-theme'); }
+                    else { document.documentElement.setAttribute('data-theme', 'light'); }
+                });
             }
             
-            currentAudio = new Audio(url);
-            currentButton = btn;
-            currentTrackId = trackId;
-            btn.innerText = "Пауза";
-            currentAudio.play();
-
-            if (!countedTracks[trackId]) {
-                listenTimer = setTimeout(() => {
-                    countedTracks[trackId] = true;
-                    localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
-                    runTransaction(ref(db, `stats/streams/${trackId}`), (current) => (current || 0) + 1);
-                    listenTimer = null;
-                }, 10000);
-            }
-
-            currentAudio.onended = () => {
-                btn.innerText = "Послушать";
-                currentAudio = null;
-                currentButton = null;
-                if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
-            };
+            sortChart();
         }
-
-        function shareTrack(trackName) {
-            const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
-            navigator.clipboard.writeText(shareText).then(() => {
-                alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
-            }).catch(() => {
-                alert('Не удалось копировать ссылку.');
-            });
-        }
-
-        document.querySelectorAll('.card').forEach(card => {
-            const trackId = card.getAttribute('data-id');
-            const trackUrl = card.getAttribute('data-url');
-            const trackName = card.getAttribute('data-name');
-            const playBtn = card.querySelector('.play-btn');
-            const shareBtn = card.querySelector('.share-btn');
-
-            if (playBtn) {
-                playBtn.addEventListener('click', () => playAudio(trackUrl, playBtn, trackId));
-            }
-            if (shareBtn) {
-                shareBtn.addEventListener('click', () => shareTrack(trackName));
-            }
-        });
-
-        const button = document.getElementById('themeButton');
-        button.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') { document.documentElement.removeAttribute('data-theme'); }
-            else { document.documentElement.setAttribute('data-theme', 'light'); }
-        });
     </script>
 </body>
 </html>
+
