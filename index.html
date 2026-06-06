@@ -624,10 +624,12 @@
             updateFollowUI();
         });
         db.ref('stats/streams').on('value', (snapshot) => {
-            const data = snapshot.val() || {};
-            for (let key in streams) {
-                if (data[key] !== undefined && data[key] !== null) {
-                    streams[key] = data[key];
+            const data = snapshot.val();
+            if (data && typeof data === 'object') {
+                for (let key in streams) {
+                    if (data[key] !== undefined && data[key] !== null) {
+                        streams[key] = data[key];
+                    }
                 }
             }
             sortChart();
@@ -686,7 +688,7 @@
                     countedTracks[trackId] = true;
                     localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
                     if (db) {
-                        db.ref(`stats/streams/${trackId}`).transaction(current => (current || 0) + 1);
+                        db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
                     }
                     listenTimer = null;
                 }, 10000);
