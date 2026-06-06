@@ -578,33 +578,36 @@
             else { followBtn.innerText = '+ Подписаться'; followBtn.disabled = false; }
         }
         function sortChart() {
+            if (!container) return;
             let cards = Array.from(container.getElementsByClassName('card'));
             cards.forEach(card => {
-                const id = card.getAttribute('data-id');
+                const id = card.id.replace('card-', '');
                 const streamElement = document.getElementById(`stream-${id}`);
                 if (streamElement) streamElement.innerText = `🎧 ${streams[id] || 0}`;
                 const trendZone = card.querySelector('.trend-zone');
                 if (trendZone) trendZone.innerHTML = '';
                 card.classList.remove('top-trending');
             });
+
             let sortableCards = cards.filter(card => !card.classList.contains('pinned'));
             sortableCards.sort((a, b) => {
-                const idA = a.getAttribute('data-id');
-                const idB = b.getAttribute('data-id');
+                const idA = a.id.replace('card-', '');
+                const idB = b.id.replace('card-', '');
                 return (streams[idB] || 0) - (streams[idA] || 0);
             });
+
             if (sortableCards.length > 0) {
                 const topCard = sortableCards[0];
-                const topId = topCard.getAttribute('data-id');
+                const topId = topCard.id.replace('card-', '');
                 if ((streams[topId] || 0) > 0) {
                     topCard.classList.add('top-trending');
                     const trendZone = topCard.querySelector('.trend-zone');
                     if (trendZone) trendZone.innerHTML = '<span class="badge trend-badge">🔥 ТРЕНД</span>';
                 }
             }
+
             sortableCards.forEach(card => container.appendChild(card));
         }
-
         db.ref('stats/totalLikes').on('value', (snapshot) => {
             totalLikes = snapshot.val() || 0;
             updateLikesUI();
@@ -642,19 +645,10 @@
             }
         });
 
-        window.shareTrack = function(trackName) {
-            const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
-            navigator.clipboard.writeText(shareText).then(() => {
-                alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
-            }).catch(() => {
-                alert('Не удалось копировать ссылку.');
-            });
-        };
-
         let currentAudio = null, currentButton = null, currentTrackId = null;
         let listenTimer = null;
 
-        window.playAudio = function(url, btn, trackId) {
+        function playAudio(url, btn, trackId) {
             if (currentAudio && currentButton === btn) {
                 currentAudio.pause();
                 currentAudio = null;
@@ -692,15 +686,47 @@
                 currentButton = null;
                 if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
             };
-        };
+        }
+
+        function shareTrack(trackName) {
+            const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
+            }).catch(() => {
+                alert('Не удалось копировать ссылку.');
+            });
+        }
+
+        // Железная привязка кликов ко всем кнопкам на странице
+        document.querySelectorAll('.card').forEach(card => {
+            const trackId = card.id.replace('card-', '');
+            const playBtn = card.querySelector('.play-btn');
+            const shareBtn = card.querySelector('.share-btn');
+            
+            // Пытаемся взять пути из старой структуры или по дефолту
+            const trackUrl = `tracks/${trackId}.mp3`;
+            const trackName = card.querySelector('.card-title').innerText.replace('Новый релиз', '').trim();
+
+            if (playBtn) {
+                playBtn.removeAttribute('onclick'); // Очищаем старые onclick, если они остались
+                playBtn.addEventListener('click', () => playAudio(trackUrl, playBtn, trackId));
+            }
+            if (shareBtn) {
+                shareBtn.removeAttribute('onclick');
+                shareBtn.addEventListener('click', () => shareTrack(trackName));
+            }
+        });
 
         const button = document.getElementById('themeButton');
-        button.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            if (currentTheme === 'light') { document.documentElement.removeAttribute('data-theme'); }
-            else { document.documentElement.setAttribute('data-theme', 'light'); }
-        });
+        if (button) {
+            button.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme === 'light') { document.documentElement.removeAttribute('data-theme'); }
+                else { document.documentElement.setAttribute('data-theme', 'light'); }
+            });
+        }
     </script>
 </body>
 </html>
+
 
