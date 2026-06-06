@@ -335,7 +335,7 @@
     </div>
 
     <div class="main-content">
-        <canvas id="particles-canvas"></canvas>
+        <canvas id="particles-canvas" style="pointer-events: none; z-index: -1;"></canvas>
         <div class="container">
             <div>
                 <button class="theme-toggle" id="themeButton">Сменить тему</button>
@@ -490,7 +490,7 @@
             </div>
         </div>
     </div>
-
+    
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script>
@@ -528,7 +528,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyBIkEe_9Qsw8yPIH4ilFc9lbVNSC76KHtw",
             authDomain: "://firebaseapp.com",
-            databaseURL: "https://firebaseio.com",
+            databaseURL: 'https://firebaseio.com',
             projectId: "oipasss",
             storageBucket: "oipasss.firebasestorage.app",
             messagingSenderId: "600072677650",
@@ -566,7 +566,7 @@
             likeStats.innerText = `Лайков: ${totalLikes}`;
             targetNode.innerText = `Цель: ${target}`;
             const percentage = Math.min((totalLikes / target) * 100, 100);
-            const yPosition = 80 - (80 * (percentage / 100));
+            const yPosition = Math.round(80 - (80 * (percentage / 100)));
             liquid.setAttribute('y', yPosition);
             if (userHasLiked) { heartBtn.innerText = '♥'; heartBtn.disabled = true; } 
             else { heartBtn.innerText = '♡'; heartBtn.disabled = false; }
@@ -581,7 +581,7 @@
             if (!container) return;
             let cards = Array.from(container.getElementsByClassName('card'));
             cards.forEach(card => {
-                const id = card.id.replace('card-', '');
+               const id = card.getAttribute('data-id');
                 const streamElement = document.getElementById(`stream-${id}`);
                 if (streamElement) streamElement.innerText = `🎧 ${streams[id] || 0}`;
                 const trendZone = card.querySelector('.trend-zone');
@@ -641,14 +641,14 @@
             if (!userHasFollowed && db) {
                 userHasFollowed = true;
                 localStorage.setItem('oipasss_followed', 'true');
-                db.ref('stats/followersCount').transaction(current => (current || 0) + 1);
+               db.ref('stats/followersCount').transaction(current => (current || 0) + 1);
             }
         });
 
         let currentAudio = null, currentButton = null, currentTrackId = null;
         let listenTimer = null;
 
-        function playAudio(url, btn, trackId) {
+        window.playAudio = function(url, btn, trackId) {
             if (currentAudio && currentButton === btn) {
                 currentAudio.pause();
                 currentAudio = null;
@@ -674,7 +674,7 @@
                     countedTracks[trackId] = true;
                     localStorage.setItem('oipasss_counted_tracks', JSON.stringify(countedTracks));
                     if (db) {
-                        db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
+                       db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
                     }
                     listenTimer = null;
                 }, 10000);
@@ -687,8 +687,7 @@
                 if (listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
             };
         }
-
-        function shareTrack(trackName) {
+        window.shareTrack = function(trackName) {
             const shareText = `Слушаю трек "${trackName}" от OIPASSS на его официальном сайте! 🎧\n${window.location.href}`;
             navigator.clipboard.writeText(shareText).then(() => {
                 alert(`Ссылка на трек "${trackName}" скопирована! Отправь её друзьям.`);
@@ -697,23 +696,23 @@
             });
         }
 
-        // Железная привязка кликов ко всем кнопкам на странице
+        // привязка кликов ко всем кнопкам на странице
         document.querySelectorAll('.card').forEach(card => {
-            const trackId = card.id.replace('card-', '');
+           const trackId = card.getAttribute('data-id');
             const playBtn = card.querySelector('.play-btn');
             const shareBtn = card.querySelector('.share-btn');
             
             // Пытаемся взять пути из старой структуры или по дефолту
             const trackUrl = `tracks/${trackId}.mp3`;
-            const trackName = card.querySelector('.card-title').innerText.replace('Новый релиз', '').trim();
+            const trackName = card.querySelector('.card-title').innerText.replace('Новый релиз', '').replace('🔥 ТРЕНД', '').trim();
 
             if (playBtn) {
                 playBtn.removeAttribute('onclick'); // Очищаем старые onclick, если они остались
-                playBtn.addEventListener('click', () => playAudio(trackUrl, playBtn, trackId));
+                playBtn.addEventListener('click', () => window.playAudio(trackUrl, playBtn, trackId));
             }
             if (shareBtn) {
                 shareBtn.removeAttribute('onclick');
-                shareBtn.addEventListener('click', () => shareTrack(trackName));
+                shareBtn.addEventListener('click', () => window.shareTrack(trackName));
             }
         });
 
@@ -728,5 +727,3 @@
     </script>
 </body>
 </html>
-
-
