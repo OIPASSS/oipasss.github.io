@@ -342,17 +342,26 @@
     height: auto !important;
     object-fit: contain !important;
     display: block !important;
+    animation: agathaBreathe 3s ease-in-out infinite !important;
+}
+@keyframes agathaBreathe {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px); 
+    }
 }
 .mascot-bubble {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--card-border);
-    padding: 4px 10px !important;  
+    padding: 2px 10px !important;  
     border-radius: 10px !important;
     font-size: 0.75rem !important; 
     font-weight: bold;
     position: relative !important;
-    max-width: 150px !important;  
+    max-width: 120px !important;  
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .mascot-bubble::after {
@@ -416,7 +425,7 @@
             <div class="mascot-container">
                <img src="images/agatha.png" alt="Агата" class="mascot-img">
                <div class="mascot-bubble">
-               <p style="margin: 0;">Приветик, что послушаем?</p>
+               <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
            </div>
        </div>
 
@@ -859,6 +868,32 @@
         }
 
         sortChart();
+        // список фраз для Агаты
+const agathaPhrases = [
+    "Приветик, что послушаем?",
+    "Рада тебя видеть! Включай трек!",
+    "Привет! Как дела?",
+    "Добро пожаловать!",
+    "Хей!",
+    "Включай погромче!",
+    "Привет! Какое сегодня настроение?"
+];
+
+function setAgathaGreeting() {
+    const textElement = document.getElementById('mascot-text');
+    if (textElement) {
+        const randomIndex = Math.floor(Math.random() * agathaPhrases.length);
+        textElement.textContent = agathaPhrases[randomIndex];
+    }
+}
+
+// Запуск при загрузке страницы
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setAgathaGreeting);
+} else {
+    setAgathaGreeting();
+}
+
     </script>
     </div>
 </div>
