@@ -328,35 +328,36 @@
             color: var(--sub-text);
             font-size: 0.75rem;
         }
-    .mascot-container {
+ .mascot-container {
     display: flex !important;
-    position: relative !important;
-    clear: both !important;
-    float: none !important;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+    flex-direction: row !important; 
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
     margin: 40px auto 20px auto !important;
-    width: max-content !important;
-    max-width: 90% !important;
+    width: 100% !important;        
+    clear: both !important;
+    position: relative !important;
 }
 .mascot-img {
-    width: 80px !important;   
+    width: 65px !important;      
     height: auto !important;
-    object-fit: contain;
+    object-fit: contain !important;
     display: block !important;
+    flex-shrink: 0 !important;    
 }
 .mascot-bubble {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--card-border);
-    padding: 8px 14px !important;
+    padding: 6px 12px !important; 
     border-radius: 12px !important;
-    font-size: 0.9rem !important; 
+    font-size: 0.8rem !important;  
     font-weight: bold;
     position: relative !important;
-    max-width: 220px !important;  
+    max-width: 160px !important;  
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    word-wrap: break-word !important;
 }
 .mascot-bubble::after {
     content: '';
@@ -368,6 +369,7 @@
     border-style: solid;
     border-color: transparent var(--card-bg) transparent transparent;
 }
+
 
 
     </style>
