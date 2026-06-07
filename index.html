@@ -428,7 +428,17 @@
                <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
            </div>
        </div>
+    <button id="open-wardrobe-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: 5px; vertical-align: middle;">🛒</button>
+</div>
+<div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 20px; border-radius: 16px; max-width: 400px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative;">
+        <h3 style="margin-top: 0; text-align: center;">Гардероб Агаты</h3>
+        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color);">✕</button>
+        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 15px; margin-top: 15px; max-height: 300px; overflow-y: auto; padding-right: 5px;">
 
+        </div>
+    </div>
+</div>
             <div class="releases" id="releasesContainer">
                 <div class="card pinned" id="card-avine" data-id="avine" data-url="tracks/avine.mp3" data-name="Avine">
                     <div class="card-main">
@@ -868,20 +878,23 @@
         }
 
         sortChart();
+
 const agathaWardrobe = [
     { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
     { id: "red", name: "Красный наряд", price: 60, file: "images/agathared.png" },
     { id: "white", name: "Белый костюм", price: 120, file: "images/agathawhite.png" }
 ];
+
 const agathaPhrases = [
     "Приветик, что послушаем?",
     "Рада тебя видеть! Включай трек!",
-    "Привет! Как дела?",
-    "Добро пожаловать!",
+    "О, новые гости! Что у нас по музыке?",
+    "Какой твой любимый трек?",
     "Хей!",
     "Включай погромче!",
     "Привет! Какое сегодня настроение?"
 ];
+
 let userNotes = parseInt(localStorage.getItem('agatha_notes')) || 0;
 let purchasedStyles = JSON.parse(localStorage.getItem('agatha_purchased')) || ["original"];
 let currentStyle = localStorage.getItem('agatha_current_style') || "original";
@@ -891,7 +904,7 @@ function initAgathaSystem() {
     updateNotesDisplay();
     setAgathaGreeting();
     applyCurrentStyle();
-    createWardrobeInterface();
+    setupWardrobeEvents();
 
     if (notesTimer) clearInterval(notesTimer);
     notesTimer = setInterval(() => {
@@ -899,7 +912,6 @@ function initAgathaSystem() {
             userNotes += 1;
             localStorage.setItem('agatha_notes', userNotes);
             updateNotesDisplay();
-            createWardrobeInterface();
         }
     }, 1000);
 }
@@ -921,47 +933,75 @@ function applyCurrentStyle() {
     const mascotImg = document.querySelector('.mascot-img');
     if (mascotImg) {
         const styleData = agathaWardrobe.find(item => item.id === currentStyle);
-        if (styleData) {
-            mascotImg.src = styleData.file;
-        }
+        if (styleData) mascotImg.src = styleData.file;
     }
 }
 
-function createWardrobeInterface() {
-    const bubbleElement = document.querySelector('.mascot-bubble');
-    if (!bubbleElement) return;
+function setupWardrobeEvents() {
+    const openBtn = document.getElementById('open-wardrobe-btn');
+    const closeBtn = document.getElementById('close-wardrobe-btn');
+    const modal = document.getElementById('wardrobe-modal');
 
-    let shopContainer = document.getElementById('agatha-shop');
-    if (!shopContainer) {
-        shopContainer = document.createElement('div');
-        shopContainer.id = 'agatha-shop';
-        shopContainer.style.cssText = 'display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; justify-content: center;';
-        bubbleElement.appendChild(shopContainer);
+    if (openBtn && modal) {
+        openBtn.onclick = () => {
+            renderWardrobeItems();
+            modal.style.display = 'flex';
+        };
     }
+    if (closeBtn && modal) {
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+    }
+}
 
-    shopContainer.innerHTML = '';
+function renderWardrobeItems() {
+    const listContainer = document.getElementById('wardrobe-items-list');
+    if (!listContainer) return;
+
+    listContainer.innerHTML = '';
 
     agathaWardrobe.forEach(item => {
-        const btn = document.createElement('button');
-        btn.style.cssText = 'padding: 2px 6px; font-size: 0.65rem; border: 1px solid var(--card-border); border-radius: 6px; cursor: pointer; font-weight: bold; background: var(--card-bg); color: var(--text-color);';
-        
+        const row = document.createElement('div');
+        row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid var(--card-border); border-radius: 12px; background: rgba(0,0,0,0.02); margin-bottom: 8px;';
+
+        const leftPart = document.createElement('div');
+        leftPart.style.cssText = 'display: flex; align-items: center; gap: 12px;';
+
+        const previewImg = document.createElement('img');
+        previewImg.src = item.file;
+        previewImg.style.cssText = 'width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: rgba(255,255,255,0.1);';
+        previewImg.onerror = () => { previewImg.src = 'images/agatha.png'; };
+
+        const nameLabel = document.createElement('span');
+        nameLabel.innerText = item.name;
+        nameLabel.style.fontWeight = 'bold';
+
+        leftPart.appendChild(previewImg);
+        leftPart.appendChild(nameLabel);
+
+        const actionBtn = document.createElement('button');
+        actionBtn.style.cssText = 'padding: 6px 12px; font-size: 0.8rem; border: 1px solid var(--card-border); border-radius: 8px; cursor: pointer; font-weight: bold; background: var(--card-bg); color: var(--text-color);';
+
         if (currentStyle === item.id) {
-            btn.innerText = `${item.name} (Надет)`;
-            btn.style.borderColor = '#ffd700';
-            btn.style.background = 'rgba(255, 215, 0, 0.1)';
+            actionBtn.innerText = 'Надет';
+            actionBtn.style.borderColor = '#ffd700';
+            actionBtn.style.background = 'rgba(255, 215, 0, 0.1)';
+            actionBtn.style.cursor = 'default';
         } else if (purchasedStyles.includes(item.id)) {
-            btn.innerText = `Надеть ${item.name}`;
-            btn.onclick = () => {
+            actionBtn.innerText = 'Надеть';
+            actionBtn.onclick = () => {
                 currentStyle = item.id;
                 localStorage.setItem('agatha_current_style', currentStyle);
                 applyCurrentStyle();
-                createWardrobeInterface();
+                renderWardrobeItems();
             };
         } else {
-            btn.innerText = `${item.name} [💰 ${item.price} 🎵]`;
+            actionBtn.innerText = `💰 ${item.price} 🎵`;
             if (userNotes >= item.price) {
-                btn.style.borderColor = '#28a745';
-                btn.onclick = () => {
+                actionBtn.style.borderColor = '#28a745';
+                actionBtn.style.background = 'rgba(40, 167, 69, 0.1)';
+                actionBtn.onclick = () => {
                     userNotes -= item.price;
                     purchasedStyles.push(item.id);
                     currentStyle = item.id;
@@ -970,14 +1010,17 @@ function createWardrobeInterface() {
                     localStorage.setItem('agatha_current_style', currentStyle);
                     updateNotesDisplay();
                     applyCurrentStyle();
-                    createWardrobeInterface();
+                    renderWardrobeItems();
                 };
             } else {
-                btn.style.opacity = '0.5';
-                btn.style.cursor = 'not-allowed';
+                actionBtn.style.opacity = '0.5';
+                actionBtn.style.cursor = 'not-allowed';
             }
         }
-        shopContainer.appendChild(btn);
+
+        row.appendChild(leftPart);
+        row.appendChild(actionBtn);
+        listContainer.appendChild(row);
     });
 }
 
@@ -987,20 +1030,7 @@ if (document.readyState === 'loading') {
     initAgathaSystem();
 }
 
-function setAgathaGreeting() {
-    const textElement = document.getElementById('mascot-text');
-    if (textElement) {
-        const randomIndex = Math.floor(Math.random() * agathaPhrases.length);
-        textElement.textContent = agathaPhrases[randomIndex];
-    }
-}
 
-// Запуск при загрузке страницы
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setAgathaGreeting);
-} else {
-    setAgathaGreeting();
-}
 
     </script>
     </div>
