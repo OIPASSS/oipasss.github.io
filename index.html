@@ -338,7 +338,7 @@
     position: relative !important;
 }
 .mascot-img {
-    width: 80px !important;       
+    width: 83px !important;       
     height: auto !important;
     object-fit: contain !important;
     display: block !important;
@@ -881,17 +881,16 @@
 
 const agathaWardrobe = [
     { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
-    { id: "red", name: "Красный наряд", price: 60, file: "images/agathared.png" },
-    { id: "white", name: "Белый костюм", price: 120, file: "images/agathawhite.png" }
+    { id: "red", name: "Красный наряд", price: 500, file: "images/agathared.png" },
+    { id: "white", name: "Белый костюм", price: 1000, file: "images/agathawhite.png" }
 ];
 
 const agathaPhrases = [
-    "Приветик, что послушаем?",
+    "Приветик, что послушаем? Выбирай!",
     "Рада тебя видеть! Включай трек!",
-    "О, новые гости! Что у нас по музыке?",
-    "Какой твой любимый трек?",
-    "Хей!",
-    "Включай погромче!",
+    "О, новые гости! Надевай наушники!",
+    "Пора зарабатывать ноты! Включай музыку!",
+    "Включай погромче! Словим вайб",
     "Привет! Какое сегодня настроение?"
 ];
 
@@ -997,7 +996,7 @@ function renderWardrobeItems() {
                 renderWardrobeItems();
             };
         } else {
-            actionBtn.innerText = `💰 ${item.price} 🎵`;
+            actionBtn.innerText = ` ${item.price} 🎵`;
             if (userNotes >= item.price) {
                 actionBtn.style.borderColor = '#28a745';
                 actionBtn.style.background = 'rgba(40, 167, 69, 0.1)';
