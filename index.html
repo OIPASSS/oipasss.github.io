@@ -328,6 +328,41 @@
             color: var(--sub-text);
             font-size: 0.75rem;
         }
+        .mascot-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px auto;
+    width: max-content;
+}
+.mascot-img {
+    width: 100px;
+    height: auto;
+    object-fit: contain;
+}
+.mascot-bubble {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--card-border);
+    padding: 12px 18px;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.mascot-bubble::after {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 8px 8px 8px 0;
+    border-style: solid;
+    border-color: transparent var(--card-bg) transparent transparent;
+}
+
     </style>
 </head>
 <body>
@@ -812,5 +847,12 @@
 
         sortChart();
     </script>
+ <div class="mascot-container">
+    <img src="image/agatha.png" alt="Агата" class="mascot-img">
+    <div class="mascot-bubble">
+        <p style="margin: 0;">Приветик, что послушаем?</p>
+    </div>
+</div>
+
 </body>
 </html>
