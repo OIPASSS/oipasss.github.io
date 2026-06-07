@@ -333,7 +333,7 @@
     align-items: center !important;
     justify-content: flex-start !important; 
     gap: 8px !important;
-    margin: 15px 0 10px -45px !important;    
+    margin: 15px 0 10px -65px !important;    
     width: max-content !important;
     position: relative !important;
 }
@@ -868,7 +868,11 @@
         }
 
         sortChart();
-        // список фраз для Агаты
+const agathaWardrobe = [
+    { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
+    { id: "red", name: "Красный наряд", price: 60, file: "images/agathared.png" },
+    { id: "white", name: "Белый костюм", price: 120, file: "images/agathawhite.png" }
+];
 const agathaPhrases = [
     "Приветик, что послушаем?",
     "Рада тебя видеть! Включай трек!",
@@ -878,6 +882,110 @@ const agathaPhrases = [
     "Включай погромче!",
     "Привет! Какое сегодня настроение?"
 ];
+let userNotes = parseInt(localStorage.getItem('agatha_notes')) || 0;
+let purchasedStyles = JSON.parse(localStorage.getItem('agatha_purchased')) || ["original"];
+let currentStyle = localStorage.getItem('agatha_current_style') || "original";
+let notesTimer = null;
+
+function initAgathaSystem() {
+    updateNotesDisplay();
+    setAgathaGreeting();
+    applyCurrentStyle();
+    createWardrobeInterface();
+
+    if (notesTimer) clearInterval(notesTimer);
+    notesTimer = setInterval(() => {
+        if (window.currentAudio && !window.currentAudio.paused && !window.currentAudio.ended) {
+            userNotes += 1;
+            localStorage.setItem('agatha_notes', userNotes);
+            updateNotesDisplay();
+            createWardrobeInterface();
+        }
+    }, 1000);
+}
+
+function updateNotesDisplay() {
+    const balanceEl = document.getElementById('notes-count');
+    if (balanceEl) balanceEl.textContent = userNotes;
+}
+
+function setAgathaGreeting() {
+    const textElement = document.getElementById('mascot-text');
+    if (textElement) {
+        const randomIndex = Math.floor(Math.random() * agathaPhrases.length);
+        textElement.textContent = agathaPhrases[randomIndex];
+    }
+}
+
+function applyCurrentStyle() {
+    const mascotImg = document.querySelector('.mascot-img');
+    if (mascotImg) {
+        const styleData = agathaWardrobe.find(item => item.id === currentStyle);
+        if (styleData) {
+            mascotImg.src = styleData.file;
+        }
+    }
+}
+
+function createWardrobeInterface() {
+    const bubbleElement = document.querySelector('.mascot-bubble');
+    if (!bubbleElement) return;
+
+    let shopContainer = document.getElementById('agatha-shop');
+    if (!shopContainer) {
+        shopContainer = document.createElement('div');
+        shopContainer.id = 'agatha-shop';
+        shopContainer.style.cssText = 'display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; justify-content: center;';
+        bubbleElement.appendChild(shopContainer);
+    }
+
+    shopContainer.innerHTML = '';
+
+    agathaWardrobe.forEach(item => {
+        const btn = document.createElement('button');
+        btn.style.cssText = 'padding: 2px 6px; font-size: 0.65rem; border: 1px solid var(--card-border); border-radius: 6px; cursor: pointer; font-weight: bold; background: var(--card-bg); color: var(--text-color);';
+        
+        if (currentStyle === item.id) {
+            btn.innerText = `${item.name} (Надет)`;
+            btn.style.borderColor = '#ffd700';
+            btn.style.background = 'rgba(255, 215, 0, 0.1)';
+        } else if (purchasedStyles.includes(item.id)) {
+            btn.innerText = `Надеть ${item.name}`;
+            btn.onclick = () => {
+                currentStyle = item.id;
+                localStorage.setItem('agatha_current_style', currentStyle);
+                applyCurrentStyle();
+                createWardrobeInterface();
+            };
+        } else {
+            btn.innerText = `${item.name} [💰 ${item.price} 🎵]`;
+            if (userNotes >= item.price) {
+                btn.style.borderColor = '#28a745';
+                btn.onclick = () => {
+                    userNotes -= item.price;
+                    purchasedStyles.push(item.id);
+                    currentStyle = item.id;
+                    localStorage.setItem('agatha_notes', userNotes);
+                    localStorage.setItem('agatha_purchased', JSON.stringify(purchasedStyles));
+                    localStorage.setItem('agatha_current_style', currentStyle);
+                    updateNotesDisplay();
+                    applyCurrentStyle();
+                    createWardrobeInterface();
+                };
+            } else {
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+        }
+        shopContainer.appendChild(btn);
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAgathaSystem);
+} else {
+    initAgathaSystem();
+}
 
 function setAgathaGreeting() {
     const textElement = document.getElementById('mascot-text');
