@@ -351,7 +351,6 @@
         Официальный сайт OIPASSS.
         <button class="theme-toggle" id="infoButton" style="margin-left: 10px; margin-bottom: 0;">Инфо</button>
         <button class="theme-toggle" id="installPwaBtn" style="display: none; margin-left: 10px; margin-bottom: 0;">Установить на экран</button>
-        <a href="https://yoomoney.ru/quickpay/fundraise/button?billNumber=1I85J8104F6.260607&" target="_blank" rel="noopener noreferrer" style="display: inline-block; margin-left: 10px; margin-bottom: 0; padding: 8px 16px; background: transparent; border: 1px solid currentColor; border-radius: 4px; font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; text-decoration: none; vertical-align: middle; box-sizing: border-box;">Поддержать</a>
 
     <span id="extraBio" style="display: none; margin-top: 15px; width: 100%;">
             <br>
@@ -372,7 +371,15 @@
     <div class="followers-stats" id="followerStats" style="margin-top: 10px; font-size: 0.8rem; color: var(--sub-text);">Подписчиков: 0</div>
                 </div>
             </div>
-
+    </div>
+    <div style="text-align: center; margin: 15px 0; width: 100%; clear: both;">
+           <button class="theme-toggle" 
+               style="margin: 0;" 
+               onclick="event.preventDefault(); event.stopPropagation(); window.open('https://yoomoney.ru/quickpay/fundraise/button?billNumber=1I85J8104F6.260607&', '_blank', 'noopener,noreferrer')"
+        Поддержать
+    </button>
+   </div>
+   <div>
             <div class="section-title">Релизы</div>
             <div class="releases" id="releasesContainer">
                 <div class="card pinned" id="card-avine" data-id="avine" data-url="tracks/avine.mp3" data-name="Avine">
