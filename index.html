@@ -328,47 +328,44 @@
             color: var(--sub-text);
             font-size: 0.75rem;
         }
- .mascot-container {
+.mascot-container {
     display: flex !important;
-    flex-direction: row !important; 
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important; 
     gap: 8px !important;
-    margin: 40px auto 20px auto !important;
-    width: 100% !important;        
-    clear: both !important;
+    margin: 15px 0 10px 10px !important;    
+    width: max-content !important;
     position: relative !important;
 }
 .mascot-img {
-    width: 65px !important;      
+    width: 55px !important;       
     height: auto !important;
     object-fit: contain !important;
     display: block !important;
-    flex-shrink: 0 !important;    
 }
 .mascot-bubble {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--card-border);
-    padding: 6px 12px !important; 
-    border-radius: 12px !important;
-    font-size: 0.8rem !important;  
+    padding: 4px 10px !important;  
+    border-radius: 10px !important;
+    font-size: 0.75rem !important; 
     font-weight: bold;
     position: relative !important;
-    max-width: 160px !important;  
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    word-wrap: break-word !important;
+    max-width: 150px !important;  
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .mascot-bubble::after {
     content: '';
     position: absolute;
-    left: -7px;
+    left: -6px;
     top: 50%;
     transform: translateY(-50%);
-    border-width: 6px 7px 6px 0;
+    border-width: 5px 6px 5px 0;
     border-style: solid;
     border-color: transparent var(--card-bg) transparent transparent;
 }
+
 
 
 
@@ -416,6 +413,13 @@
                 </div>
             </div>
             <div class="section-title">Релизы</div>
+            <div class="mascot-container">
+               <img src="images/agatha.png" alt="Агата" class="mascot-img">
+               <div class="mascot-bubble">
+               <p style="margin: 0;">Приветик, что послушаем?</p>
+           </div>
+       </div>
+
             <div class="releases" id="releasesContainer">
                 <div class="card pinned" id="card-avine" data-id="avine" data-url="tracks/avine.mp3" data-name="Avine">
                     <div class="card-main">
@@ -856,10 +860,6 @@
 
         sortChart();
     </script>
- <div class="mascot-container">
-    <img src="images/agatha.png" alt="Агата" class="mascot-img">
-    <div class="mascot-bubble">
-        <p style="margin: 0;">Приветик, что послушаем?</p>
     </div>
 </div>
 
