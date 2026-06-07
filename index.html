@@ -328,40 +328,47 @@
             color: var(--sub-text);
             font-size: 0.75rem;
         }
-        .mascot-container {
-    display: flex;
+    .mascot-container {
+    display: flex !important;
+    position: relative !important;
+    clear: both !important;
+    float: none !important;
     align-items: center;
     justify-content: center;
-    gap: 15px;
-    margin: 30px auto;
-    width: max-content;
+    gap: 12px;
+    margin: 40px auto 20px auto !important;
+    width: max-content !important;
+    max-width: 90% !important;
 }
 .mascot-img {
-    width: 100px;
-    height: auto;
+    width: 80px !important;   
+    height: auto !important;
     object-fit: contain;
+    display: block !important;
 }
 .mascot-bubble {
     background-color: var(--card-bg);
     color: var(--text-color);
     border: 1px solid var(--card-border);
-    padding: 12px 18px;
-    border-radius: 16px;
-    font-size: 1rem;
+    padding: 8px 14px !important;
+    border-radius: 12px !important;
+    font-size: 0.9rem !important; 
     font-weight: bold;
-    position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative !important;
+    max-width: 220px !important;  
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 .mascot-bubble::after {
     content: '';
     position: absolute;
-    left: -8px;
+    left: -7px;
     top: 50%;
     transform: translateY(-50%);
-    border-width: 8px 8px 8px 0;
+    border-width: 6px 7px 6px 0;
     border-style: solid;
     border-color: transparent var(--card-bg) transparent transparent;
 }
+
 
     </style>
 </head>
@@ -848,7 +855,7 @@
         sortChart();
     </script>
  <div class="mascot-container">
-    <img src="image/agatha.png" alt="Агата" class="mascot-img">
+    <img src="images/agatha.png" alt="Агата" class="mascot-img">
     <div class="mascot-bubble">
         <p style="margin: 0;">Приветик, что послушаем?</p>
     </div>
