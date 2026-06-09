@@ -377,6 +377,113 @@
 
 
 
+.bg-decoration {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.05;
+    transition: all 0.5s ease;
+}
+[data-theme="light"] .bg-decoration {
+    opacity: 0.1;
+}
+@keyframes backgroundFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(5px, -8px) rotate(1.5deg); }
+}
+
+[data-card-style="neon"] .card {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+[data-card-style="neon"] .card:hover {
+    border-color: var(--text-color);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+[data-theme="light"][data-card-style="neon"] .card {
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.02);
+}
+[data-theme="light"][data-card-style="neon"] .card:hover {
+    border-color: var(--text-color);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-card-style="glow"] .card {
+    position: relative;
+    overflow: hidden;
+}
+[data-card-style="glow"] .card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.13), transparent);
+    transform: skewX(-20deg);
+    transition: none;
+}
+[data-theme="light"][data-card-style="glow"] .card::after {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
+}
+[data-card-style="glow"] .card:hover::after {
+    left: 150%;
+    transition: left 0.6s ease-in-out;
+}
+
+
+#achievements-section {
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 550px;
+    box-sizing: border-box;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    transition: box-shadow 0.5s ease;
+    box-shadow: 0 0 calc(var(--achievements-glow, 0) * 3px) rgba(255, 255, 255, calc(var(--achievements-glow, 0) * 0.08));
+}
+[data-theme="light"] #achievements-section {
+    box-shadow: 0 0 calc(var(--achievements-glow, 0) * 3px) rgba(0, 0, 0, calc(var(--achievements-glow, 0) * 0.05));
+}
+.achievements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
+}
+.achievement-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid transparent;
+    transition: all 0.3s;
+}
+.achievement-row.unlocked {
+    border-color: var(--card-border);
+    background: rgba(255, 255, 255, 0.02);
+}
+.achievement-row.unlocked .ach-title {
+    font-weight: bold;
+}
+.achievement-row .ach-status {
+    color: var(--sub-text);
+    font-weight: bold;
+}
+.achievement-row.unlocked .ach-status {
+    color: #28a745;
+}
+
+
+
+        
+
 
     </style>
 </head>
@@ -421,23 +528,68 @@
     <div class="followers-stats" id="followerStats" style="margin-top: 10px; font-size: 0.8rem; color: var(--sub-text);">Подписчиков: 0</div>
                 </div>
             </div>
+
+
+<button id="open-promo-btn" class="theme-toggle" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; margin: 0; padding: 6px 12px; font-size: 0.7rem; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Промокод</button>
+
+<div id="promo-sidebar" style="position: fixed; top: 0; right: -320px; width: 280px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--card-border); z-index: 10000; box-shadow: -10px 0 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; padding: 30px 20px; box-sizing: border-box; transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(3px);">
+    <button id="close-promo-btn" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
+    <h3 style="margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.95rem; margin-bottom: 5px;">Активация кода</h3>
+    <p style="font-size: 0.75rem; color: var(--sub-text); margin-top: 0; margin-bottom: 25px;">Количество мест на активацию ограничено!</p>
+    <input type="text" id="promo-sidebar-input" placeholder="Код" style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border); color: var(--text-color); border-radius: 8px; font-size: 0.85rem; outline: none; font-weight: bold; text-transform: uppercase; box-sizing: border-box; margin-bottom: 12px; letter-spacing: 1px;">
+    <button class="theme-toggle" id="promo-sidebar-submit" style="width: 100%; padding: 10px; font-size: 0.8rem; margin-bottom: 0; border-radius: 8px; letter-spacing: 1px;">Активировать</button>
+</div>
+
+
+<div id="achievements-section" style="--achievements-glow: 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
+        <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
+        <span style="font-size: 0.8rem; font-weight: bold; color: var(--sub-text);" id="ach-progress-text">Прогресс: 0/10</span>
+    </div>
+    <div class="achievements-grid" id="achievementsGrid">
+        <div class="achievement-row" id="ach-1"><span class="ach-title">1. Фанат</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-2"><span class="ach-title">2. Стиляга</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-3"><span class="ach-title">3. До, ре, ми, фа, соль, ля, си.</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-4"><span class="ach-title">4. Люблю подарки</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-5"><span class="ach-title">5. Модель</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-6"><span class="ach-title">6. Просто босс</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-7"><span class="ach-title">7. Заело пластинку</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-8"><span class="ach-title">8. Белый</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-9"><span class="ach-title">9. Преданный слушатель</span><span class="ach-status">❌</span></div>
+        <div class="achievement-row" id="ach-10"><span class="ach-title">10. ???</span><span class="ach-status">❌</span></div>
+    </div>
+</div>
+
+
+
+                
                 
 <div class="mascot-container">
     <img src="images/agatha.png" alt="Агата" class="mascot-img">
     <div class="mascot-bubble">
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
-    <button id="open-wardrobe-btn" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; margin-left: 5px; vertical-align: middle;">🛒</button>
+     <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
 </div>
                 
-<div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center;">
-    <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 20px; border-radius: 16px; max-width: 400px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); position: relative;">
-        <h3 style="margin-top: 0; text-align: center; margin-bottom: 5px;">Гардероб</h3>
-        <div style="text-align: center; font-weight: bold; margin-bottom: 15px; color: #ffd700; font-size: 0.9rem;">Баланс: 🎵 <span id="notes-count">0</span></div>
-        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color);">✕</button>
-        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 15px; max-height: 300px; overflow-y: auto; padding-right: 5px;"></div>
+<div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
+    <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 25px; border-radius: 16px; max-width: 440px; width: 90%; box-shadow: 0 10px 35px rgba(0,0,0,0.5); position: relative;">
+        
+        <h3 style="margin-top: 0; text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; font-size: 1.1rem;">Магазин</h3>
+        <div style="text-align: center; font-weight: bold; margin-bottom: 20px; color: #ffd700; font-size: 0.9rem; letter-spacing: 1px;">Баланс: 🎵 <span id="notes-count">0</span></div>
+        
+        <button id="close-wardrobe-btn" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6; transition: opacity 0.2s;">✕</button>
+        
+        <div style="display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; overflow-x: auto; white-space: nowrap;">
+            <button class="theme-toggle" id="tab-wardrobe" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
+            <button class="theme-toggle" id="tab-decor" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0;">Украшения</button>
+            <button class="theme-toggle" id="tab-interface" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0;">Интерфейс</button>
+        </div>
+
+        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 5px;"></div>
     </div>
 </div>
+
       <div class="section-title">Релизы</div>
             <div class="releases" id="releasesContainer">
                 <div class="card pinned" id="card-avine" data-id="avine" data-url="tracks/avine.mp3" data-name="Avine">
@@ -817,6 +969,7 @@
                         db.ref('stats/streams').child(trackId).transaction(current => (current || 0) + 1);
                     }
                     window.listenTimer = null;
+                    if (typeof window.registerLocalStream === 'function') window.registerLocalStream(trackId);
                 }, 10000);
             };
 
@@ -879,10 +1032,47 @@
 
         sortChart();
 
-const agathaWardrobe = [
-    { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
-    { id: "white", name: "Белый костюм", price: 1000, file: "images/agathawhite.png" }
-];
+const SHOP_CATALOG = {
+    wardrobe: [
+        { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
+        { id: "white", name: "Белый костюм", price: 1000, file: "images/agathawhite.png" }
+    ],
+    decor: [
+        { id: "decor_none", name: "Без украшений", price: 0, html: "" },
+        { 
+            id: "decor_lines", 
+            name: "Нити", 
+            price: 15000, 
+            html: `
+                <svg class="bg-decoration" style="left: -20px; top: 20%; width: 150px; height: 300px; animation: backgroundFloat 6s ease-in-out infinite;" viewBox="0 0 100 200"><path d="M0,0 Q50,50 0,100 T0,200" fill="none" stroke="var(--text-color)" stroke-width="1"/></svg>
+                <svg class="bg-decoration" style="right: -20px; top: 40%; width: 150px; height: 300px; animation: backgroundFloat 8s ease-in-out infinite;" viewBox="0 0 100 200"><path d="M100,0 Q50,50 100,100 T100,200" fill="none" stroke="var(--text-color)" stroke-width="1"/></svg>
+            ` 
+        },
+        { 
+            id: "decor_geometry", 
+            name: "Мини-геометрия", 
+            price: 40000, 
+            html: `
+                <svg class="bg-decoration" style="left: -50px; top: 10%; width: 120px; height: 120px; animation: backgroundFloat 7s ease-in-out infinite;"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--text-color)" stroke-width="2"/></svg>
+                <svg class="bg-decoration" style="right: -60px; bottom: 15%; width: 150px; height: 150px; animation: backgroundFloat 9s ease-in-out infinite;"><circle cx="75" cy="75" r="70" fill="none" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="5,5"/></svg>
+            ` 
+        }
+    ],
+    interface: [
+        { id: "style_default", name: "Стандартный", price: 0, value: "" },
+        { id: "style_neon", name: "Мягкий неон", price: 10000, value: "neon" },
+        { id: "style_glow", name: "Световой блик", price: 30000, value: "glow" }
+    ]
+};
+
+let currentTab = 'wardrobe';
+let purchasedStyles = JSON.parse(localStorage.getItem('agatha_purchased')) || ["original"];
+let currentStyle = localStorage.getItem('agatha_current_style') || "original";
+let purchasedDecors = JSON.parse(localStorage.getItem('oipasss_purchased_decors')) || ["decor_none"];
+let currentDecor = localStorage.getItem('oipasss_current_decor') || "decor_none";
+let purchasedInterfaces = JSON.parse(localStorage.getItem('oipasss_purchased_interfaces')) || ["style_default"];
+let currentInterface = localStorage.getItem('oipasss_current_interface') || "style_default";
+
 
 const agathaPhrases = [
     "Приветик, что послушаем? Выбирай!",
@@ -930,26 +1120,27 @@ function setAgathaGreeting() {
 function applyCurrentStyle() {
     const mascotImg = document.querySelector('.mascot-img');
     if (mascotImg) {
-        const styleData = agathaWardrobe.find(item => item.id === currentStyle);
+        const styleData = SHOP_CATALOG.wardrobe.find(item => item.id === currentStyle);
         if (styleData) mascotImg.src = styleData.file;
     }
 }
 
-function setupWardrobeEvents() {
-    const openBtn = document.getElementById('open-wardrobe-btn');
-    const closeBtn = document.getElementById('close-wardrobe-btn');
-    const modal = document.getElementById('wardrobe-modal');
-
-    if (openBtn && modal) {
-        openBtn.onclick = () => {
-            renderWardrobeItems();
-            modal.style.display = 'flex';
-        };
+function applyCurrentDecor() {
+    document.querySelectorAll('.bg-decoration').forEach(el => el.remove());
+    const decorData = SHOP_CATALOG.decor.find(item => item.id === currentDecor);
+    if (decorData && decorData.html) {
+        document.body.insertAdjacentHTML('beforeend', decorData.html);
     }
-    if (closeBtn && modal) {
-        closeBtn.onclick = () => {
-            modal.style.display = 'none';
-        };
+}
+
+function applyCurrentInterface() {
+    const interfaceData = SHOP_CATALOG.interface.find(item => item.id === currentInterface);
+    if (interfaceData) {
+        if (interfaceData.value) {
+            document.body.setAttribute('data-card-style', interfaceData.value);
+        } else {
+            document.body.removeAttribute('data-card-style');
+        }
     }
 }
 
@@ -958,40 +1149,67 @@ function renderWardrobeItems() {
     if (!listContainer) return;
 
     listContainer.innerHTML = '';
+    const items = SHOP_CATALOG[currentTab];
 
-    agathaWardrobe.forEach(item => {
+    items.forEach(item => {
         const row = document.createElement('div');
         row.style.cssText = 'display: flex; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid var(--card-border); border-radius: 12px; background: rgba(0,0,0,0.02); margin-bottom: 8px;';
 
         const leftPart = document.createElement('div');
         leftPart.style.cssText = 'display: flex; align-items: center; gap: 12px;';
 
-        const previewImg = document.createElement('img');
-        previewImg.src = item.file;
-        previewImg.style.cssText = 'width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: rgba(255,255,255,0.1);';
-        previewImg.onerror = () => { previewImg.src = 'images/agatha.png'; };
+        if (currentTab === 'wardrobe') {
+            const previewImg = document.createElement('img');
+            previewImg.src = item.file;
+            previewImg.style.cssText = 'width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: rgba(255,255,255,0.1);';
+            previewImg.onerror = () => { previewImg.src = 'images/agatha.png'; };
+            leftPart.appendChild(previewImg);
+        }
 
         const nameLabel = document.createElement('span');
         nameLabel.innerText = item.name;
         nameLabel.style.fontWeight = 'bold';
-
-        leftPart.appendChild(previewImg);
         leftPart.appendChild(nameLabel);
+        row.appendChild(leftPart);
 
         const actionBtn = document.createElement('button');
         actionBtn.style.cssText = 'padding: 6px 12px; font-size: 0.8rem; border: 1px solid var(--card-border); border-radius: 8px; cursor: pointer; font-weight: bold; background: var(--card-bg); color: var(--text-color);';
 
-        if (currentStyle === item.id) {
+        let isActive = false;
+        let isPurchased = false;
+
+        if (currentTab === 'wardrobe') {
+            isActive = (currentStyle === item.id);
+            isPurchased = purchasedStyles.includes(item.id);
+        } else if (currentTab === 'decor') {
+            isActive = (currentDecor === item.id);
+            isPurchased = purchasedDecors.includes(item.id);
+        } else if (currentTab === 'interface') {
+            isActive = (currentInterface === item.id);
+            isPurchased = purchasedInterfaces.includes(item.id);
+        }
+
+        if (isActive) {
             actionBtn.innerText = 'Надет';
             actionBtn.style.borderColor = '#ffd700';
             actionBtn.style.background = 'rgba(255, 215, 0, 0.1)';
             actionBtn.style.cursor = 'default';
-        } else if (purchasedStyles.includes(item.id)) {
+        } else if (isPurchased) {
             actionBtn.innerText = 'Надеть';
             actionBtn.onclick = () => {
-                currentStyle = item.id;
-                localStorage.setItem('agatha_current_style', currentStyle);
-                applyCurrentStyle();
+                if (currentTab === 'wardrobe') {
+                    currentStyle = item.id;
+                    localStorage.setItem('agatha_current_style', currentStyle);
+                    applyCurrentStyle();
+                } else if (currentTab === 'decor') {
+                    currentDecor = item.id;
+                    localStorage.setItem('oipasss_current_decor', currentDecor);
+                    applyCurrentDecor();
+                } else if (currentTab === 'interface') {
+                    currentInterface = item.id;
+                    localStorage.setItem('oipasss_current_interface', currentInterface);
+                    applyCurrentInterface();
+                }
                 renderWardrobeItems();
             };
         } else {
@@ -1001,13 +1219,28 @@ function renderWardrobeItems() {
                 actionBtn.style.background = 'rgba(40, 167, 69, 0.1)';
                 actionBtn.onclick = () => {
                     userNotes -= item.price;
-                    purchasedStyles.push(item.id);
-                    currentStyle = item.id;
                     localStorage.setItem('agatha_notes', userNotes);
-                    localStorage.setItem('agatha_purchased', JSON.stringify(purchasedStyles));
-                    localStorage.setItem('agatha_current_style', currentStyle);
                     updateNotesDisplay();
-                    applyCurrentStyle();
+
+                    if (currentTab === 'wardrobe') {
+                        purchasedStyles.push(item.id);
+                        currentStyle = item.id;
+                        localStorage.setItem('agatha_purchased', JSON.stringify(purchasedStyles));
+                        localStorage.setItem('agatha_current_style', currentStyle);
+                        applyCurrentStyle();
+                    } else if (currentTab === 'decor') {
+                        purchasedDecors.push(item.id);
+                        currentDecor = item.id;
+                        localStorage.setItem('oipasss_purchased_decors', JSON.stringify(purchasedDecors));
+                        localStorage.setItem('oipasss_current_decor', currentDecor);
+                        applyCurrentDecor();
+                    } else if (currentTab === 'interface') {
+                        purchasedInterfaces.push(item.id);
+                        currentInterface = item.id;
+                        localStorage.setItem('oipasss_purchased_interfaces', JSON.stringify(purchasedInterfaces));
+                        localStorage.setItem('oipasss_current_interface', currentInterface);
+                        applyCurrentInterface();
+                    }
                     renderWardrobeItems();
                 };
             } else {
@@ -1016,10 +1249,70 @@ function renderWardrobeItems() {
             }
         }
 
-        row.appendChild(leftPart);
         row.appendChild(actionBtn);
         listContainer.appendChild(row);
+        if (typeof checkAchievements === 'function') checkAchievements();
+
     });
+}
+
+function switchTab(tabId) {
+    currentTab = tabId;
+    const tabs = ['wardrobe', 'decor', 'interface'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+            if (t === tabId) {
+                btn.style.background = 'var(--text-color)';
+                btn.style.color = 'var(--bg-color)';
+            } else {
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-color)';
+            }
+        }
+    });
+    renderWardrobeItems();
+}
+
+function setupWardrobeEvents() {
+    const openBtn = document.getElementById('open-wardrobe-btn');
+    const closeBtn = document.getElementById('close-wardrobe-btn');
+    const modal = document.getElementById('wardrobe-modal');
+
+    if (openBtn && modal) {
+        openBtn.onclick = () => {
+            switchTab('wardrobe');
+            modal.style.display = 'flex';
+        };
+    }
+    if (closeBtn && modal) {
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+    }
+
+    ['wardrobe', 'decor', 'interface'].forEach(tabId => {
+        const btn = document.getElementById(`tab-${tabId}`);
+        if (btn) btn.onclick = () => switchTab(tabId);
+    });
+}
+
+function initAgathaSystem() {
+    updateNotesDisplay();
+    setAgathaGreeting();
+    applyCurrentStyle();
+    applyCurrentDecor();
+    applyCurrentInterface();
+    setupWardrobeEvents();
+
+    if (notesTimer) clearInterval(notesTimer);
+    notesTimer = setInterval(() => {
+        if (window.currentAudio && !window.currentAudio.paused && !window.currentAudio.ended) {
+            userNotes += 1;
+            localStorage.setItem('agatha_notes', userNotes);
+            updateNotesDisplay();
+        }
+    }, 1000);
 }
 
 if (document.readyState === 'loading') {
@@ -1030,9 +1323,186 @@ if (document.readyState === 'loading') {
 
 
 
-    </script>
+const PROMO_LIST = {
+    "FREE_IPPA": { reward: 3000, maxUses: 5 }
+};
+
+function setupPromoSystem() {
+    const openBtn = document.getElementById('open-promo-btn');
+    const closeBtn = document.getElementById('close-promo-btn');
+    const sidebar = document.getElementById('promo-sidebar');
+    const submitBtn = document.getElementById('promo-sidebar-submit');
+    const inputField = document.getElementById('promo-sidebar-input');
+    const mascotText = document.getElementById('mascot-text');
+
+    if (openBtn && sidebar) openBtn.onclick = () => { sidebar.style.right = '0px'; };
+    if (closeBtn && sidebar) closeBtn.onclick = () => { sidebar.style.right = '-320px'; };
+
+    if (submitBtn && inputField) {
+        submitBtn.onclick = () => {
+            const enteredCode = inputField.value.trim().toUpperCase();
+            if (!enteredCode) return;
+
+            const promoData = PROMO_LIST[enteredCode];
+            if (!promoData) {
+                alert("Такого промокода не существует.");
+                return;
+            }
+
+            let userUsedPromos = JSON.parse(localStorage.getItem('oipasss_used_promos')) || [];
+            if (userUsedPromos.includes(enteredCode)) {
+                alert("Вы уже активировали этот промокод!");
+                return;
+            }
+
+            if (!db) {
+                alert("Ошибка подключения к базе данных.");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Проверка...";
+
+            const promoRef = db.ref('promo_activations/' + enteredCode);
+            promoRef.transaction((currentUses) => {
+                let uses = currentUses || 0;
+                if (uses >= promoData.maxUses) {
+                    return; 
+                }
+                return uses + 1;
+            }, (error, committed, snapshot) => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Активировать";
+
+                if (error) {
+                    alert("Произошла ошибка базы данных. Попробуйте еще раз.");
+                    return;
+                }
+
+                if (!committed) {
+                    alert("Увы! Все активации этого промокода уже закончились.");
+                    return;
+                }
+
+                userNotes += promoData.reward;
+                localStorage.setItem('agatha_notes', userNotes);
+                if (typeof updateNotesDisplay === 'function') updateNotesDisplay();
+
+                userUsedPromos.push(enteredCode);
+                localStorage.setItem('oipasss_used_promos', JSON.stringify(userUsedPromos));
+
+                inputField.value = '';
+                if (sidebar) sidebar.style.right = '-320px';
+
+                if (mascotText) {
+                    mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
+                }
+                alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
+            });
+        };
+    }
+}
+
+
+
+
+
+let totalLocalStreams = parseInt(localStorage.getItem('oipasss_total_streams')) || 0;
+let trackRepeatCounter = JSON.parse(localStorage.getItem('oipasss_repeat_counter')) || { lastId: "", count: 0 };
+let themeChangedFlag = localStorage.getItem('oipasss_theme_changed') === 'true';
+let logoClicksSession = 0;
+
+function checkAchievements() {
+    let unlockedCount = 0;
+    const totalItemsBought = (purchasedStyles.length - 1) + (purchasedDecors.length - 1) + (purchasedInterfaces.length - 1);
+    const hasBoughtSkin = purchasedStyles.length > 1;
+    const usedPromos = JSON.parse(localStorage.getItem('oipasss_used_promos')) || [];
+
+    const conditions = {
+        1: totalLocalStreams >= 25,
+        2: totalItemsBought >= 1,
+        3: userNotes >= 10000,
+        4: usedPromos.length >= 1,
+        5: hasBoughtSkin,
+        6: totalItemsBought >= 5,
+        7: trackRepeatCounter.count >= 10,
+        8: themeChangedFlag,
+        9: totalLocalStreams >= 100,
+        10: logoClicksSession >= 100
+    };
+
+    for (let id in conditions) {
+        const row = document.getElementById(`ach-${id}`);
+        if (row) {
+            if (conditions[id]) {
+                row.classList.add('unlocked');
+                row.querySelector('.ach-status').innerText = '✔️';
+                unlockedCount++;
+            } else {
+                row.classList.remove('unlocked');
+                row.querySelector('.ach-status').innerText = '❌';
+            }
+        }
+    }
+
+    const progressText = document.getElementById('ach-progress-text');
+    if (progressText) progressText.innerText = `Прогресс: ${unlockedCount}/10`;
+    
+    const section = document.getElementById('achievements-section');
+    if (section) section.style.setProperty('--achievements-glow', unlockedCount);
+}
+
+window.registerLocalStream = function(trackId) {
+    totalLocalStreams++;
+    localStorage.setItem('oipasss_total_streams', totalLocalStreams);
+
+    if (trackRepeatCounter.lastId === trackId) {
+        trackRepeatCounter.count++;
+    } else {
+        trackRepeatCounter.lastId = trackId;
+        trackRepeatCounter.count = 1;
+    }
+    localStorage.setItem('oipasss_repeat_counter', JSON.stringify(trackRepeatCounter));
+    checkAchievements();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    checkAchievements();
+    
+    const logoImg = document.querySelector('.logo-img');
+    if (logoImg) {
+        logoImg.addEventListener('click', () => {
+            logoClicksSession++;
+            if (logoClicksSession <= 100) checkAchievements();
+        });
+    }
+
+    const themeBtn = document.getElementById('themeButton');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            themeChangedFlag = true;
+            localStorage.setItem('oipasss_theme_changed', 'true');
+            checkAchievements();
+        });
+    }
+});
+
+        
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPromoSystem);
+} else {
+    setupPromoSystem();
+}
+
+
+
+
+        
+</script>
     </div>
 </div>
 
 </body>
 </html>
+
+
