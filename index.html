@@ -701,39 +701,45 @@
                     <div class="target-node" id="targetNode">Цель: 10</div>
                 </div>
             </div>
-               <div style="margin-top: 25px; margin-bottom: 15px;">
-                <button id="open-promo-btn" class="theme-toggle" style="margin: 0; padding: 6px 12px; font-size: 0.7rem; border-radius: 6px;">Промокод</button>
-            </div>
 
-            <div id="promo-sidebar" style="position: fixed; top: 0; right: -320px; width: 280px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--card-border); z-index: 10000; box-shadow: -10px 0 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; padding: 30px 20px; box-sizing: border-box; transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(3px);">
-                <button id="close-promo-btn" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
-                <h3 style="margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 5px;">Активация кода</h3>
-                <p style="font-size: 0.7rem; color: var(--sub-text); margin-top: 0; margin-bottom: 25px;">Количество мест ограничено!</p>
-                <input type="text" id="promo-sidebar-input" placeholder="Код" style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border); color: var(--text-color); border-radius: 8px; font-size: 0.85rem; outline: none; font-weight: bold; text-transform: uppercase; box-sizing: border-box; margin-bottom: 12px; letter-spacing: 1px;">
-                <button class="theme-toggle" id="promo-sidebar-submit" style="width: 100%; padding: 10px; font-size: 0.8rem; margin-bottom: 0; border-radius: 8px; letter-spacing: 1px;">Активировать</button>
-            </div>
-
-            <div id="achievements-section" style="--achievements-glow: 0; margin-top: 25px; margin-bottom: 20px; max-width: 550px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
-                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
-                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--sub-text);" id="ach-progress-text">Прогресс: 0/10</span>
-                </div>
-                <div class="achievements-grid" id="achievementsGrid">
-                    <div class="achievement-row" id="ach-1"><span class="ach-title">1. Фанат</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-2"><span class="ach-title">2. Стиляга</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-3"><span class="ach-title">3. До, ре, ми, фа, соль, ля, си.</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-4"><span class="ach-title">4. Люблю подарки</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-5"><span class="ach-title">5. Модель</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-6"><span class="ach-title">6. Просто босс</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-7"><span class="ach-title">7. Заело пластинку</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-8"><span class="ach-title">8. Белый</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-9"><span class="ach-title">9. Преданный слушатель</span><span class="ach-status">❌</span></div>
-                    <div class="achievement-row" id="ach-10"><span class="ach-title">10. ???</span><span class="ach-status">❌</span></div>
-                </div>
-            </div>
-
+                
+         <div style="margin-top: 25px; margin-bottom: 20px; max-width: 550px; position: relative; z-index: 10;">
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
+        <button id="open-promo-btn" class="theme-toggle" style="margin: 0; padding: 6px 12px; font-size: 0.75rem; border-radius: 6px;">Промокоды</button>
+        <div id="promo-inline-container" style="display: none; opacity: 0; gap: 6px; transition: opacity 0.3s ease; align-items: center;">
+            <input type="text" id="promo-sidebar-input" placeholder="Код" style="padding: 6px 10px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border); color: var(--text-color); border-radius: 6px; font-size: 0.75rem; outline: none; font-weight: bold; text-transform: uppercase; width: 120px; letter-spacing: 1px;">
+            <button class="theme-toggle" id="promo-sidebar-submit" style="padding: 6px 12px; font-size: 0.75rem; margin-bottom: 0; border-radius: 6px;">ОК</button>
         </div>
     </div>
+
+    <div id="achievements-section" style="border: 1px solid var(--card-border); background: var(--card-bg); padding: 20px; border-radius: 12px; transition: box-shadow 0.4s ease; box-shadow: 0 0 0px transparent;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--sub-text);" id="ach-progress-text">Прогресс: 0/10</span>
+        </div>
+        
+        <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 2px; margin-bottom: 15px; overflow: hidden;">
+            <div id="ach-progress-bar" style="width: 0%; height: 100%; background: var(--text-color); transition: width 0.4s ease;"></div>
+        </div>
+
+        <div class="achievements-grid" id="achievementsGrid">
+            <div class="achievement-row" id="ach-1"><span class="ach-title">1. Фанат</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-2"><span class="ach-title">2. Стиляга</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-3"><span class="ach-title">3. До, ре, ми, фа, соль, ля, си.</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-4"><span class="ach-title">4. Люблю подарки</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-5"><span class="ach-title">5. Модель</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-6"><span class="ach-title">6. Просто босс</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-7"><span class="ach-title">7. Заело пластинку</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-8"><span class="ach-title">8. Белый</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-9"><span class="ach-title">9. Преданный слушатель</span><span class="ach-status">❌</span></div>
+            <div class="achievement-row" id="ach-10"><span class="ach-title">10. ???</span><span class="ach-status">❌</span></div>
+        </div>
+    </div>
+
+</div>
+</div>
+            
 
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -1307,14 +1313,22 @@ const PROMO_LIST = {
 
 function setupPromoSystem() {
     const openBtn = document.getElementById('open-promo-btn');
-    const closeBtn = document.getElementById('close-promo-btn');
-    const sidebar = document.getElementById('promo-sidebar');
+    const container = document.getElementById('promo-inline-container');
     const submitBtn = document.getElementById('promo-sidebar-submit');
     const inputField = document.getElementById('promo-sidebar-input');
     const mascotText = document.getElementById('mascot-text');
 
-    if (openBtn && sidebar) openBtn.onclick = () => { sidebar.style.right = '0px'; };
-    if (closeBtn && sidebar) closeBtn.onclick = () => { sidebar.style.right = '-320px'; };
+    if (openBtn && container) {
+        openBtn.onclick = () => {
+            if (container.style.display === 'none' || !container.style.display) {
+                container.style.display = 'flex';
+                setTimeout(() => { container.style.opacity = '1'; }, 10);
+            } else {
+                container.style.opacity = '0';
+                setTimeout(() => { container.style.display = 'none'; }, 300);
+            }
+        };
+    }
 
     if (submitBtn && inputField) {
         submitBtn.onclick = () => {
@@ -1339,26 +1353,24 @@ function setupPromoSystem() {
             }
 
             submitBtn.disabled = true;
-            submitBtn.innerText = "Проверка...";
+            submitBtn.innerText = "...";
 
             const promoRef = db.ref('promo_activations/' + enteredCode);
             promoRef.transaction((currentUses) => {
                 let uses = currentUses || 0;
-                if (uses >= promoData.maxUses) {
-                    return; 
-                }
+                if (uses >= promoData.maxUses) return; 
                 return uses + 1;
             }, (error, committed, snapshot) => {
                 submitBtn.disabled = false;
-                submitBtn.innerText = "Активировать";
+                submitBtn.innerText = "ОК";
 
                 if (error) {
-                    alert("Произошла ошибка базы данных. Попробуйте еще раз.");
+                    alert("Ошибка базы данных.");
                     return;
                 }
 
                 if (!committed) {
-                    alert("Увы! Все активации этого промокода уже закончились.");
+                    alert("Активации закончились.");
                     return;
                 }
 
@@ -1370,20 +1382,20 @@ function setupPromoSystem() {
                 localStorage.setItem('oipasss_used_promos', JSON.stringify(userUsedPromos));
 
                 inputField.value = '';
-                if (sidebar) sidebar.style.right = '-320px';
+                if (container) {
+                    container.style.opacity = '0';
+                    setTimeout(() => { container.style.display = 'none'; }, 300);
+                }
 
                 if (mascotText) {
                     mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
                 }
-                alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
+                if (typeof checkAchievements === 'function') checkAchievements();
+                alert(`Промокод активирован! Начислено +${promoData.reward} нот.`);
             });
         };
     }
 }
-
-
-
-
 
 let totalLocalStreams = parseInt(localStorage.getItem('oipasss_total_streams')) || 0;
 let trackRepeatCounter = JSON.parse(localStorage.getItem('oipasss_repeat_counter')) || { lastId: "", count: 0 };
@@ -1426,8 +1438,21 @@ function checkAchievements() {
     const progressText = document.getElementById('ach-progress-text');
     if (progressText) progressText.innerText = `Прогресс: ${unlockedCount}/10`;
     
+    const progressBar = document.getElementById('ach-progress-bar');
+    if (progressBar) progressBar.style.width = `${unlockedCount * 10}%`;
+
     const section = document.getElementById('achievements-section');
-    if (section) section.style.setProperty('--achievements-glow', unlockedCount);
+    if (section) {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const color = isLight ? '0, 0, 0' : '255, 255, 255';
+        if (unlockedCount > 0) {
+            section.style.boxShadow = `0 0 ${unlockedCount * 3}px rgba(${color}, ${unlockedCount * 0.06})`;
+            section.style.borderColor = `rgba(${color}, ${0.1 + (unlockedCount * 0.08)})`;
+        } else {
+            section.style.boxShadow = 'none';
+            section.style.borderColor = 'var(--card-border)';
+        }
+    }
 }
 
 window.registerLocalStream = function(trackId) {
@@ -1446,6 +1471,8 @@ window.registerLocalStream = function(trackId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAchievements();
+    setupPromoSystem();
+    if (typeof setupWardrobeEvents === 'function') setupWardrobeEvents();
     
     const logoImg = document.querySelector('.logo-img');
     if (logoImg) {
@@ -1460,16 +1487,15 @@ document.addEventListener('DOMContentLoaded', () => {
         themeBtn.addEventListener('click', () => {
             themeChangedFlag = true;
             localStorage.setItem('oipasss_theme_changed', 'true');
-            checkAchievements();
+            setTimeout(checkAchievements, 50);
         });
     }
 });
 
-        
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupPromoSystem);
-} else {
+if (document.readyState !== 'loading') {
+    checkAchievements();
     setupPromoSystem();
+    if (typeof setupWardrobeEvents === 'function') setupWardrobeEvents();
 }
 
 
