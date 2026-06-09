@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OIPASSS</title>
     <style>
+
+
+        html, body {
+    overflow-x: hidden !important;
+    position: relative;
+    width: 100%;
+}
+
         :root {
             --bg-color: #000000;
             --text-color: #ffffff;
@@ -527,42 +535,7 @@
     </p>
     <div class="followers-stats" id="followerStats" style="margin-top: 10px; font-size: 0.8rem; color: var(--sub-text);">Подписчиков: 0</div>
                 </div>
-            </div>
-
-
-<button id="open-promo-btn" class="theme-toggle" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; margin: 0; padding: 6px 12px; font-size: 0.7rem; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">Промокод</button>
-
-<div id="promo-sidebar" style="position: fixed; top: 0; right: -320px; width: 280px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--card-border); z-index: 10000; box-shadow: -10px 0 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; padding: 30px 20px; box-sizing: border-box; transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(3px);">
-    <button id="close-promo-btn" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
-    <h3 style="margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.95rem; margin-bottom: 5px;">Активация кода</h3>
-    <p style="font-size: 0.75rem; color: var(--sub-text); margin-top: 0; margin-bottom: 25px;">Количество мест на активацию ограничено!</p>
-    <input type="text" id="promo-sidebar-input" placeholder="Код" style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border); color: var(--text-color); border-radius: 8px; font-size: 0.85rem; outline: none; font-weight: bold; text-transform: uppercase; box-sizing: border-box; margin-bottom: 12px; letter-spacing: 1px;">
-    <button class="theme-toggle" id="promo-sidebar-submit" style="width: 100%; padding: 10px; font-size: 0.8rem; margin-bottom: 0; border-radius: 8px; letter-spacing: 1px;">Активировать</button>
-</div>
-
-
-<div id="achievements-section" style="--achievements-glow: 0;">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
-        <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
-        <span style="font-size: 0.8rem; font-weight: bold; color: var(--sub-text);" id="ach-progress-text">Прогресс: 0/10</span>
-    </div>
-    <div class="achievements-grid" id="achievementsGrid">
-        <div class="achievement-row" id="ach-1"><span class="ach-title">1. Фанат</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-2"><span class="ach-title">2. Стиляга</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-3"><span class="ach-title">3. До, ре, ми, фа, соль, ля, си.</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-4"><span class="ach-title">4. Люблю подарки</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-5"><span class="ach-title">5. Модель</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-6"><span class="ach-title">6. Просто босс</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-7"><span class="ach-title">7. Заело пластинку</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-8"><span class="ach-title">8. Белый</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-9"><span class="ach-title">9. Преданный слушатель</span><span class="ach-status">❌</span></div>
-        <div class="achievement-row" id="ach-10"><span class="ach-title">10. ???</span><span class="ach-status">❌</span></div>
-    </div>
-</div>
-
-
-
-                
+            </div>          
                 
 <div class="mascot-container">
     <img src="images/agatha.png" alt="Агата" class="mascot-img">
@@ -728,8 +701,40 @@
                     <div class="target-node" id="targetNode">Цель: 10</div>
                 </div>
             </div>
+               <div style="margin-top: 25px; margin-bottom: 15px;">
+                <button id="open-promo-btn" class="theme-toggle" style="margin: 0; padding: 6px 12px; font-size: 0.7rem; border-radius: 6px;">Промокод</button>
+            </div>
+
+            <div id="promo-sidebar" style="position: fixed; top: 0; right: -320px; width: 280px; height: 100%; background: var(--card-bg); border-left: 1px solid var(--card-border); z-index: 10000; box-shadow: -10px 0 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; padding: 30px 20px; box-sizing: border-box; transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1); backdrop-filter: blur(3px);">
+                <button id="close-promo-btn" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
+                <h3 style="margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; font-size: 0.85rem; margin-bottom: 5px;">Активация кода</h3>
+                <p style="font-size: 0.7rem; color: var(--sub-text); margin-top: 0; margin-bottom: 25px;">Количество мест ограничено!</p>
+                <input type="text" id="promo-sidebar-input" placeholder="Код" style="width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.03); border: 1px solid var(--card-border); color: var(--text-color); border-radius: 8px; font-size: 0.85rem; outline: none; font-weight: bold; text-transform: uppercase; box-sizing: border-box; margin-bottom: 12px; letter-spacing: 1px;">
+                <button class="theme-toggle" id="promo-sidebar-submit" style="width: 100%; padding: 10px; font-size: 0.8rem; margin-bottom: 0; border-radius: 8px; letter-spacing: 1px;">Активировать</button>
+            </div>
+
+            <div id="achievements-section" style="--achievements-glow: 0; margin-top: 25px; margin-bottom: 20px; max-width: 550px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 8px;">
+                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
+                    <span style="font-size: 0.8rem; font-weight: bold; color: var(--sub-text);" id="ach-progress-text">Прогресс: 0/10</span>
+                </div>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <div class="achievement-row" id="ach-1"><span class="ach-title">1. Фанат</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-2"><span class="ach-title">2. Стиляга</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-3"><span class="ach-title">3. До, ре, ми, фа, соль, ля, си.</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-4"><span class="ach-title">4. Люблю подарки</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-5"><span class="ach-title">5. Модель</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-6"><span class="ach-title">6. Просто босс</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-7"><span class="ach-title">7. Заело пластинку</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-8"><span class="ach-title">8. Белый</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-9"><span class="ach-title">9. Преданный слушатель</span><span class="ach-status">❌</span></div>
+                    <div class="achievement-row" id="ach-10"><span class="ach-title">10. ???</span><span class="ach-status">❌</span></div>
+                </div>
+            </div>
+
         </div>
     </div>
+
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
