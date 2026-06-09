@@ -1078,7 +1078,6 @@ let currentDecor = localStorage.getItem('oipasss_current_decor') || "decor_none"
 let purchasedInterfaces = JSON.parse(localStorage.getItem('oipasss_purchased_interfaces')) || ["style_default"];
 let currentInterface = localStorage.getItem('oipasss_current_interface') || "style_default";
 
-
 const agathaPhrases = [
     "Приветик, что послушаем? Выбирай!",
     "Рада тебя видеть! Включай трек!",
@@ -1089,8 +1088,6 @@ const agathaPhrases = [
 ];
 
 let userNotes = parseInt(localStorage.getItem('agatha_notes')) || 0;
-let purchasedStyles = JSON.parse(localStorage.getItem('agatha_purchased')) || ["original"];
-let currentStyle = localStorage.getItem('agatha_current_style') || "original";
 let notesTimer = null;
 
 function initAgathaSystem() {
@@ -1300,30 +1297,6 @@ function setupWardrobeEvents() {
         const btn = document.getElementById(`tab-${tabId}`);
         if (btn) btn.onclick = () => switchTab(tabId);
     });
-}
-
-function initAgathaSystem() {
-    updateNotesDisplay();
-    setAgathaGreeting();
-    applyCurrentStyle();
-    applyCurrentDecor();
-    applyCurrentInterface();
-    setupWardrobeEvents();
-
-    if (notesTimer) clearInterval(notesTimer);
-    notesTimer = setInterval(() => {
-        if (window.currentAudio && !window.currentAudio.paused && !window.currentAudio.ended) {
-            userNotes += 1;
-            localStorage.setItem('agatha_notes', userNotes);
-            updateNotesDisplay();
-        }
-    }, 1000);
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAgathaSystem);
-} else {
-    initAgathaSystem();
 }
 
 
