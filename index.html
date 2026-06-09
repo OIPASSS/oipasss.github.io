@@ -537,31 +537,26 @@
                 </div>
             </div>          
                 
-<div class="mascot-container">
+<div class="mascot-container" style="position: relative; display: inline-block;">
     <img src="images/agatha.png" alt="Агата" class="mascot-img">
     <div class="mascot-bubble">
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
-     <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
-</div>
-                
-<div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(3px);">
-    <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 25px; border-radius: 16px; max-width: 440px; width: 90%; box-shadow: 0 10px 35px rgba(0,0,0,0.5); position: relative;">
-        
-        <h3 style="margin-top: 0; text-align: center; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; font-size: 1.1rem;">Магазин</h3>
-        <div style="text-align: center; font-weight: bold; margin-bottom: 20px; color: #ffd700; font-size: 0.9rem; letter-spacing: 1px;">Баланс: 🎵 <span id="notes-count">0</span></div>
-        
-        <button id="close-wardrobe-btn" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6; transition: opacity 0.2s;">✕</button>
-        
-        <div style="display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px; overflow-x: auto; white-space: nowrap;">
-            <button class="theme-toggle" id="tab-wardrobe" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
-            <button class="theme-toggle" id="tab-decor" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0;">Украшения</button>
-            <button class="theme-toggle" id="tab-interface" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0;">Интерфейс</button>
-        </div>
+    <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
 
-        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 10px; max-height: 280px; overflow-y: auto; padding-right: 5px;"></div>
+    <div id="wardrobe-modal" style="display: none; opacity: 0; transform: translateX(-50%) translateY(20px); position: absolute; bottom: 100%; left: 50%; width: 320px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 18px; border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 9999; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-sizing: border-box; margin-bottom: 15px;">
+        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
+        <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Магазин вайба</h3>
+        <div style="text-align: center; font-weight: bold; margin-bottom: 12px; color: #ffd700; font-size: 0.8rem; letter-spacing: 0.5px;">Баланс: 🎵 <span id="notes-count">0</span></div>
+        <div style="display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; overflow-x: auto; white-space: nowrap;">
+            <button class="theme-toggle" id="tab-wardrobe" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
+            <button class="theme-toggle" id="tab-decor" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px;">Украшения</button>
+            <button class="theme-toggle" id="tab-interface" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px;">Интерфейс</button>
+        </div>
+        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 3px;"></div>
     </div>
 </div>
+
 
       <div class="section-title">Релизы</div>
             <div class="releases" id="releasesContainer">
@@ -1308,7 +1303,7 @@ function setupWardrobeEvents() {
 
 
 const PROMO_LIST = {
-    "777GGG": { reward: 90000, maxUses: 1 }
+    "FREE_IPPA": { reward: 300000, maxUses: 5 }
 };
 
 function setupPromoSystem() {
@@ -1356,8 +1351,9 @@ function setupPromoSystem() {
             submitBtn.innerText = "...";
 
             const promoRef = db.ref('promo_activations/' + enteredCode);
+            
             promoRef.transaction((currentUses) => {
-                let uses = currentUses || 0;
+                let uses = (currentUses === null) ? 0 : currentUses;
                 if (uses >= promoData.maxUses) return; 
                 return uses + 1;
             }, (error, committed, snapshot) => {
@@ -1365,12 +1361,13 @@ function setupPromoSystem() {
                 submitBtn.innerText = "ОК";
 
                 if (error) {
+                    console.error(error);
                     alert("Ошибка базы данных.");
                     return;
                 }
 
                 if (!committed) {
-                    alert("Активации закончились.");
+                    alert("Увы! Все активации этого промокода уже закончились.");
                     return;
                 }
 
@@ -1391,7 +1388,7 @@ function setupPromoSystem() {
                     mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
                 }
                 if (typeof checkAchievements === 'function') checkAchievements();
-                alert(`Промокод активирован! Начислено +${promoData.reward} нот.`);
+                alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
             });
         };
     }
