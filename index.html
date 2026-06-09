@@ -1489,10 +1489,86 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function setupWardrobeEvents() {
+    const openBtn = document.getElementById('open-wardrobe-btn');
+    const closeBtn = document.getElementById('close-wardrobe-btn');
+    const modal = document.getElementById('wardrobe-modal');
+
+    if (openBtn && modal) {
+        openBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (modal.style.display === 'none' || !modal.style.display) {
+                switchTab('wardrobe');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                    modal.style.transform = 'translateX(-50%) translateY(0px)';
+                }, 10);
+            } else {
+                closeWardrobe();
+            }
+        };
+    }
+    
+    function closeWardrobe() {
+        if (!modal) return;
+        modal.style.opacity = '0';
+        modal.style.transform = 'translateX(-50%) translateY(20px)';
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
+    }
+
+    if (closeBtn) closeBtn.onclick = closeWardrobe;
+
+    ['wardrobe', 'decor', 'interface'].forEach(tabId => {
+        const btn = document.getElementById(`tab-${tabId}`);
+        if (btn) btn.onclick = () => switchTab(tabId);
+    });
+}
+
+function initAgathaSystem() {
+    if (typeof updateNotesDisplay === 'function') updateNotesDisplay();
+    if (typeof setAgathaGreeting === 'function') setAgathaGreeting();
+    if (typeof applyCurrentStyle === 'function') applyCurrentStyle();
+    if (typeof applyCurrentDecor === 'function') applyCurrentDecor();
+    if (typeof applyCurrentInterface === 'function') applyCurrentInterface();
+    
+    setupWardrobeEvents();
+    if (typeof setupPromoSystem === 'function') setupPromoSystem();
+    if (typeof checkAchievements === 'function') checkAchievements();
+
+    if (notesTimer) clearInterval(notesTimer);
+    notesTimer = setInterval(() => {
+        if (window.currentAudio && !window.currentAudio.paused && !window.currentAudio.ended) {
+            userNotes += 1;
+            localStorage.setItem('agatha_notes', userNotes);
+            if (typeof updateNotesDisplay === 'function') updateNotesDisplay();
+        }
+    }, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initAgathaSystem();
+    
+    const logoImg = document.querySelector('.logo-img');
+    if (logoImg) {
+        logoImg.addEventListener('click', () => {
+            logoClicksSession++;
+            if (logoClicksSession <= 100 && typeof checkAchievements === 'function') checkAchievements();
+        });
+    }
+
+    const themeBtn = document.getElementById('themeButton');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', () => {
+            themeChangedFlag = true;
+            localStorage.setItem('oipasss_theme_changed', 'true');
+            if (typeof checkAchievements === 'function') setTimeout(checkAchievements, 50);
+        });
+    }
+});
+
 if (document.readyState !== 'loading') {
-    checkAchievements();
-    setupPromoSystem();
-    if (typeof setupWardrobeEvents === 'function') setupWardrobeEvents();
+    initAgathaSystem();
 }
 
 
