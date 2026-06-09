@@ -490,6 +490,89 @@
 
 
 
+
+
+
+@keyframes starFall {
+    0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translate(-600px, 600px) rotate(-45deg); opacity: 0; }
+}
+.shooting-star {
+    position: fixed;
+    top: -10px;
+    width: 80px;
+    height: 1.5px;
+    background: linear-gradient(90deg, var(--text-color), transparent);
+    animation: starFall 2s linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+@keyframes snakeWave {
+    0%, 100% { transform: translateY(0) scaleX(1); }
+    50% { transform: translateY(25px) scaleX(1.05); }
+}
+.neon-snake-left {
+    position: fixed; left: 10px; top: 10%; width: 3px; height: 80%;
+    background: linear-gradient(to bottom, transparent, var(--text-color), transparent);
+    box-shadow: 0 0 15px var(--text-color); animation: snakeWave 5s ease-in-out infinite;
+    z-index: 1; pointer-events: none; opacity: 0.4;
+}
+.neon-snake-right {
+    position: fixed; right: 10px; top: 10%; width: 3px; height: 80%;
+    background: linear-gradient(to bottom, transparent, var(--text-color), transparent);
+    box-shadow: 0 0 15px var(--text-color); animation: snakeWave 6s ease-in-out infinite;
+    z-index: 1; pointer-events: none; opacity: 0.4;
+}
+@keyframes rotateGrad {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+body[data-card-style="gradient"] .play-btn,
+body[data-card-style="gradient"] .share-btn,
+body[data-card-style="gradient"] .theme-toggle {
+    background: linear-gradient(-45deg, #434343, #ffffff, #000000, #888888) !important;
+    background-size: 400% 400% !important;
+    color: #fff !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    transition: all 0.3s;
+}
+body[data-card-style="gradient"] .play-btn:active,
+body[data-card-style="gradient"] .share-btn:active,
+body[data-card-style="gradient"] .theme-toggle:active {
+    animation: rotateGrad 1.5s linear infinite !important;
+}
+@keyframes shineGlow {
+    0% { left: -150%; }
+    100% { left: 150%; }
+}
+body[data-card-style="glow"] .play-btn,
+body[data-card-style="glow"] .share-btn,
+body[data-card-style="glow"] .theme-toggle {
+    box-shadow: 0 0 8px rgba(255,255,255,0.4) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+body[data-card-style="glow"] .play-btn::after,
+body[data-card-style="glow"] .share-btn::after,
+body[data-card-style="glow"] .theme-toggle::after {
+    content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-20deg); pointer-events: none;
+}
+body[data-card-style="glow"] .play-btn:active::after,
+body[data-card-style="glow"] .share-btn:active::after,
+body[data-card-style="glow"] .theme-toggle:active::after {
+    animation: shineGlow 0.6s ease-out !important;
+}
+
+
+
+
+
+        
         
 
 
@@ -542,21 +625,9 @@
     <div class="mascot-bubble">
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
+    
     <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
 
-           <div id="wardrobe-modal" style="display: none; opacity: 0; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); width: 290px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 15px; border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 9999; transition: opacity 0.3s ease; box-sizing: border-box; margin-bottom: 10px;">
-        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-color); opacity: 0.6; z-index: 10000;">✕</button>
-
-        <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Магазин вайба</h3>
-        <div style="text-align: center; font-weight: bold; margin-bottom: 12px; color: #ffd700; font-size: 0.8rem; letter-spacing: 0.5px;">Баланс: 🎵 <span id="notes-count">0</span></div>
-        <div style="display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; overflow-x: auto; white-space: nowrap;">
-            <button class="theme-toggle" id="tab-wardrobe" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
-            <button class="theme-toggle" id="tab-decor" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px;">Украшения</button>
-            <button class="theme-toggle" id="tab-interface" style="padding: 4px 10px; font-size: 0.7rem; margin-bottom: 0; border-radius: 4px;">Интерфейс</button>
-        </div>
-        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; padding-right: 3px;"></div>
-    </div>
-</div>
 
 
       <div class="section-title">Релизы</div>
@@ -709,6 +780,29 @@
         </div>
     </div>
 
+
+
+<div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10002; align-items: center; justify-content: center; backdrop-filter: blur(4px); box-sizing: border-box; padding: 20px;">
+    <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 20px; border-radius: 16px; max-width: 360px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;">
+        
+        <button id="close-wardrobe-btn" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
+        
+        <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem;">Магазин вайба</h3>
+        <div style="text-align: center; font-weight: bold; margin-bottom: 15px; color: #ffd700; font-size: 0.85rem; letter-spacing: 1px;">Баланс: 🎵 <span id="notes-count">0</span></div>
+        
+        <div style="display: flex; gap: 4px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; overflow-x: auto; white-space: nowrap;">
+            <button class="theme-toggle" id="tab-wardrobe" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; border-radius: 6px; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
+            <button class="theme-toggle" id="tab-decor" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; border-radius: 6px;">Украшения</button>
+            <button class="theme-toggle" id="tab-interface" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; border-radius: 6px;">Интерфейс</button>
+        </div>
+
+        <div id="wardrobe-items-list" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; padding-right: 3px;"></div>
+    </div>
+</div>
+
+
+
+             
     <div id="achievements-section" style="border: 1px solid var(--card-border); background: var(--card-bg); padding: 20px; border-radius: 12px; transition: box-shadow 0.4s ease; box-shadow: 0 0 0px transparent;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
             <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Достижения</span>
@@ -1042,35 +1136,38 @@
 const SHOP_CATALOG = {
     wardrobe: [
         { id: "original", name: "Оригинал", price: 0, file: "images/agatha.png" },
-        { id: "white", name: "Белый костюм", price: 1000, file: "images/agathawhite.png" }
+        { id: "white", name: "Белый", price: 1000, file: "images/agathawhite.png" }
     ],
     decor: [
-        { id: "decor_none", name: "Без украшений", price: 0, html: "" },
+        { id: "decor_none", name: "Без эффектов", price: 0, html: "" },
         { 
             id: "decor_lines", 
-            name: "Нити", 
+            name: "Падающие звезды", 
             price: 15000, 
             html: `
-                <svg class="bg-decoration" style="left: -20px; top: 20%; width: 150px; height: 300px; animation: backgroundFloat 6s ease-in-out infinite;" viewBox="0 0 100 200"><path d="M0,0 Q50,50 0,100 T0,200" fill="none" stroke="var(--text-color)" stroke-width="1"/></svg>
-                <svg class="bg-decoration" style="right: -20px; top: 40%; width: 150px; height: 300px; animation: backgroundFloat 8s ease-in-out infinite;" viewBox="0 0 100 200"><path d="M100,0 Q50,50 100,100 T100,200" fill="none" stroke="var(--text-color)" stroke-width="1"/></svg>
+                <div class="bg-decoration shooting-star" style="right: 10%; animation-delay: 0s;"></div>
+                <div class="bg-decoration shooting-star" style="right: 30%; animation-delay: 0.5s;"></div>
+                <div class="bg-decoration shooting-star" style="right: 50%; animation-delay: 1s;"></div>
+                <div class="bg-decoration shooting-star" style="right: 70%; animation-delay: 1.5s;"></div>
             ` 
         },
         { 
             id: "decor_geometry", 
-            name: "Мини-геометрия", 
-            price: 40000, 
+            name: "Неоновая змейка", 
+            price: 10000, 
             html: `
-                <svg class="bg-decoration" style="left: -50px; top: 10%; width: 120px; height: 120px; animation: backgroundFloat 7s ease-in-out infinite;"><circle cx="60" cy="60" r="50" fill="none" stroke="var(--text-color)" stroke-width="2"/></svg>
-                <svg class="bg-decoration" style="right: -60px; bottom: 15%; width: 150px; height: 150px; animation: backgroundFloat 9s ease-in-out infinite;"><circle cx="75" cy="75" r="70" fill="none" stroke="var(--text-color)" stroke-width="2" stroke-dasharray="5,5"/></svg>
+                <div class="bg-decoration neon-snake-left"></div>
+                <div class="bg-decoration neon-snake-right"></div>
             ` 
         }
     ],
     interface: [
         { id: "style_default", name: "Стандартный", price: 0, value: "" },
-        { id: "style_neon", name: "Мягкий неон", price: 10000, value: "neon" },
-        { id: "style_glow", name: "Световой блик", price: 30000, value: "glow" }
+        { id: "style_neon", name: "Градиент", price: 10000, value: "gradient" },
+        { id: "style_glow", name: "Блестящий", price: 15000, value: "glow" }
     ]
 };
+
 
 let currentTab = 'wardrobe';
 let purchasedStyles = JSON.parse(localStorage.getItem('agatha_purchased')) || ["original"];
@@ -1286,17 +1383,21 @@ function setupWardrobeEvents() {
     if (openBtn && modal) {
         openBtn.onclick = (e) => {
             e.stopPropagation();
-            if (modal.style.display === 'none' || !modal.style.display) {
-                switchTab('wardrobe');
-                modal.style.display = 'block';
-                setTimeout(() => {
-                    modal.style.opacity = '1';
-                }, 10);
-            } else {
-                closeWardrobe();
-            }
+            switchTab('wardrobe');
+            modal.style.display = 'flex';
         };
     }
+    
+    if (closeBtn && modal) {
+        closeBtn.onclick = () => { modal.style.display = 'none'; };
+    }
+
+    ['wardrobe', 'decor', 'interface'].forEach(tabId => {
+        const btn = document.getElementById(`tab-${tabId}`);
+        if (btn) btn.onclick = () => switchTab(tabId);
+    });
+}
+
 
     
     function closeWardrobe() {
