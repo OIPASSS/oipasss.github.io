@@ -544,8 +544,9 @@
     </div>
     <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
 
-    <div id="wardrobe-modal" style="display: none; opacity: 0; transform: translateX(-50%) translateY(20px); position: absolute; bottom: 100%; left: 50%; width: 320px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 18px; border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 9999; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-sizing: border-box; margin-bottom: 15px;">
-        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
+       <div id="wardrobe-modal" style="display: none; opacity: 0; position: absolute; bottom: 105%; left: 0; width: 100%; min-width: 290px; background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 15px; border-radius: 14px; box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 9999; transition: all 0.3s ease; box-sizing: border-box; margin-bottom: 10px;">
+        <button id="close-wardrobe-btn" style="position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 1.1rem; cursor: pointer; color: var(--text-color); opacity: 0.6; z-index: 10000;">✕</button>
+
         <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Магазин вайба</h3>
         <div style="text-align: center; font-weight: bold; margin-bottom: 12px; color: #ffd700; font-size: 0.8rem; letter-spacing: 0.5px;">Баланс: 🎵 <span id="notes-count">0</span></div>
         <div style="display: flex; gap: 4px; margin-bottom: 12px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; overflow-x: auto; white-space: nowrap;">
@@ -1283,16 +1284,27 @@ function setupWardrobeEvents() {
     const modal = document.getElementById('wardrobe-modal');
 
     if (openBtn && modal) {
-        openBtn.onclick = () => {
-            switchTab('wardrobe');
-            modal.style.display = 'flex';
+        openBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (modal.style.display === 'none' || !modal.style.display) {
+                switchTab('wardrobe');
+                modal.style.display = 'block';
+                setTimeout(() => {
+                    modal.style.opacity = '1';
+                }, 10);
+            } else {
+                closeWardrobe();
+            }
         };
     }
-    if (closeBtn && modal) {
-        closeBtn.onclick = () => {
-            modal.style.display = 'none';
-        };
+    
+    function closeWardrobe() {
+        if (!modal) return;
+        modal.style.opacity = '0';
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
+
+    if (closeBtn) closeBtn.onclick = closeWardrobe;
 
     ['wardrobe', 'decor', 'interface'].forEach(tabId => {
         const btn = document.getElementById(`tab-${tabId}`);
@@ -1300,10 +1312,8 @@ function setupWardrobeEvents() {
     });
 }
 
-
-
 const PROMO_LIST = {
-    "FREE_IPPA": { reward: 300000, maxUses: 5 }
+    "FREE_IPPA": { reward: 300000, maxUses: 1 }
 };
 
 function setupPromoSystem() {
@@ -1352,47 +1362,53 @@ function setupPromoSystem() {
 
             const promoRef = db.ref('promo_activations/' + enteredCode);
             
-            promoRef.transaction((currentUses) => {
-                let uses = (currentUses === null) ? 0 : currentUses;
-                if (uses >= promoData.maxUses) return; 
-                return uses + 1;
-            }, (error, committed, snapshot) => {
+            promoRef.once('value').then((snapshot) => {
+                let currentUses = snapshot.val() || 0;
+                
+                if (currentUses >= promoData.maxUses) {
+                    alert("Увы! Все активации этого промокода уже закончились.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "ОК";
+                    return;
+                }
+
+                promoRef.set(currentUses + 1).then(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "ОК";
+
+                    userNotes += promoData.reward;
+                    localStorage.setItem('agatha_notes', userNotes);
+                    if (typeof updateNotesDisplay === 'function') updateNotesDisplay();
+
+                    userUsedPromos.push(enteredCode);
+                    localStorage.setItem('oipasss_used_promos', JSON.stringify(userUsedPromos));
+
+                    inputField.value = '';
+                    if (container) {
+                        container.style.opacity = '0';
+                        setTimeout(() => { container.style.display = 'none'; }, 300);
+                    }
+
+                    if (mascotText) {
+                        mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
+                    }
+                    if (typeof checkAchievements === 'function') checkAchievements();
+                    alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
+                }).catch((err) => {
+                    console.error(err);
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "ОК";
+                    alert("Ошибка записи в базу.");
+                });
+            }).catch(() => {
                 submitBtn.disabled = false;
                 submitBtn.innerText = "ОК";
-
-                if (error) {
-                    console.error(error);
-                    alert("Ошибка базы данных.");
-                    return;
-                }
-
-                if (!committed) {
-                    alert("Увы! Все активации этого промокода уже закончились.");
-                    return;
-                }
-
-                userNotes += promoData.reward;
-                localStorage.setItem('agatha_notes', userNotes);
-                if (typeof updateNotesDisplay === 'function') updateNotesDisplay();
-
-                userUsedPromos.push(enteredCode);
-                localStorage.setItem('oipasss_used_promos', JSON.stringify(userUsedPromos));
-
-                inputField.value = '';
-                if (container) {
-                    container.style.opacity = '0';
-                    setTimeout(() => { container.style.display = 'none'; }, 300);
-                }
-
-                if (mascotText) {
-                    mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
-                }
-                if (typeof checkAchievements === 'function') checkAchievements();
-                alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
+                alert("Ошибка чтения данных с сервера.");
             });
         };
     }
 }
+
 
 let totalLocalStreams = parseInt(localStorage.getItem('oipasss_total_streams')) || 0;
 let trackRepeatCounter = JSON.parse(localStorage.getItem('oipasss_repeat_counter')) || { lastId: "", count: 0 };
