@@ -1349,33 +1349,35 @@ function renderWardrobeItems() {
     });
 }
 
+
 function setupWardrobeEvents() {
     const openBtn = document.getElementById('open-wardrobe-btn');
     const closeBtn = document.getElementById('close-wardrobe-btn');
     const modal = document.getElementById('wardrobe-modal');
-
-    function closeWardrobe() {
-        if (!modal) return;
-        modal.style.opacity = '0';
-        modal.style.transform = 'translateY(20px)';
-        setTimeout(() => { modal.style.display = 'none'; }, 300);
-    }
 
     if (openBtn && modal) {
         openBtn.onclick = (e) => {
             e.stopPropagation();
             if (modal.style.display === 'none' || !modal.style.display) {
                 switchTab('wardrobe');
-                modal.style.display = 'flex';
-                modal.style.transform = 'translateY(20px)';
+                modal.style.display = 'block';
                 setTimeout(() => {
                     modal.style.opacity = '1';
-                    modal.style.transform = 'translateY(0px)';
+                    // ИСПРАВЛЕНО: Теперь плашка плавно встает ровно по центру экрана
+                    modal.style.transform = 'translate(-50%, -50%)';
                 }, 10);
             } else {
                 closeWardrobe();
             }
         };
+    }
+    
+    function closeWardrobe() {
+        if (!modal) return;
+        modal.style.opacity = '0';
+        // ИСПРАВЛЕНО: При закрытии плашка аккуратно уплывает чуть ниже центра
+        modal.style.transform = 'translate(-50%, -40%)';
+        setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 
     if (closeBtn) closeBtn.onclick = closeWardrobe;
@@ -1386,8 +1388,7 @@ function setupWardrobeEvents() {
     });
 }
 
-
-
+        
 
 
 const PROMO_LIST = {
