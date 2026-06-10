@@ -616,36 +616,7 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
 
 
 
-
-        
-@keyframes cyber3DGridMove {
-    0% { background-position: 0% 0%; }
-    100% { background-position: 0% -100%; }
-}
-.cyber-waves-container {
-    position: fixed !important;
-    top: auto !important;
-    bottom: -10vh !important; 
-    left: -10vw !important;
-    width: 120vw !important;
-    height: 60vh !important;
-    z-index: -1 !important;
-    pointer-events: none !important;
-    background-image: radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
-    background-size: 25px 25px !important;
-    opacity: 0.25 !important;
-
-    transform: perspective(200px) rotateX(70deg) !important;
-    transform-origin: center bottom !important;
-    animation: cyber3DGridMove 25s linear infinite !important;
-}
-
-
-
-
-
-        
-        
+       
 
         
 </style>
@@ -699,7 +670,7 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
     
-<button id="open-wardrobe-btn" class="theme-toggle" onclick="if(typeof setupWardrobeEvents === 'function') { setupWardrobeEvents(); this.onclick(); }" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
+<button id="open-wardrobe-btn" class="theme-toggle" onclick="if(typeof setupWardrobeEvents === 'function') { setupWardrobeEvents(); this.onclick(); }" style="margin-left: 5px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
 
 
 
@@ -1235,14 +1206,6 @@ const SHOP_CATALOG = {
                     <div class="liquid-paint-layer-secondary"></div>
                 </div>
             `
-        },
-        {
-            id: "decor_waves",
-            name: "Волны",
-            price: 25000,
-            html: `
-                <div class="cyber-waves-container"></div>
-            `
         }
     ],
     interface: [
@@ -1443,7 +1406,9 @@ function renderWardrobeItems() {
 
 
 const PROMO_LIST = {
-    "FOROIP": { reward: 300000, maxUses: 3 }
+    "FOROIP": { reward: 300000, maxUses: 1}
+    "NEW-UP-GIFT": { reward: 1000, maxUses: 10}
+    "OIPASSS_LOVER": { reward: 450, maxUses: 10}
 };
 
 function setupPromoSystem() {
