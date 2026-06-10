@@ -1350,63 +1350,6 @@ function renderWardrobeItems() {
 }
 
 
-function setupWardrobeEvents() {
-    const openBtn = document.getElementById('open-wardrobe-btn');
-    const closeBtn = document.getElementById('close-wardrobe-btn');
-    const modal = document.getElementById('wardrobe-modal');
-
-    window.switchTab = function(tabId) {
-        currentTab = tabId;
-        const tabs = ['wardrobe', 'decor', 'interface'];
-        tabs.forEach(t => {
-            const btn = document.getElementById(`tab-${t}`);
-            if (btn) {
-                if (t === tabId) {
-                    btn.style.background = 'var(--text-color)';
-                    btn.style.color = 'var(--bg-color)';
-                } else {
-                    btn.style.background = 'transparent';
-                    btn.style.color = 'var(--text-color)';
-                }
-            }
-        });
-        if (typeof renderWardrobeItems === 'function') renderWardrobeItems();
-    }
-
-    if (openBtn && modal) {
-        openBtn.onclick = (e) => {
-            e.stopPropagation();
-            if (modal.style.display === 'none' || !modal.style.display) {
-                switchTab('wardrobe');
-                modal.style.display = 'block';
-                setTimeout(() => {
-                    modal.style.opacity = '1';
-                    modal.style.transform = 'translate(-50%, -50%)';
-                }, 10);
-            } else {
-                closeWardrobe();
-            }
-        };
-    }
-    
-    function closeWardrobe() {
-        if (!modal) return;
-        modal.style.opacity = '0';
-        modal.style.transform = 'translate(-50%, -40%)';
-        setTimeout(() => { modal.style.display = 'none'; }, 300);
-    }
-
-    if (closeBtn) closeBtn.onclick = closeWardrobe;
-
-    ['wardrobe', 'decor', 'interface'].forEach(tabId => {
-        const btn = document.getElementById(`tab-${tabId}`);
-        if (btn) btn.onclick = () => switchTab(tabId);
-    });
-}
-
-        
-
-
 const PROMO_LIST = {
     "FOROIP": { reward: 300000, maxUses: 3 }
 };
@@ -1566,6 +1509,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function switchTab(tabId) {
+    currentTab = tabId;
+    const tabs = ['wardrobe', 'decor', 'interface'];
+    tabs.forEach(t => {
+        const btn = document.getElementById(`tab-${t}`);
+        if (btn) {
+            if (t === tabId) {
+                btn.style.background = 'var(--text-color)';
+                btn.style.color = 'var(--bg-color)';
+            } else {
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--text-color)';
+            }
+        }
+    });
+    if (typeof renderWardrobeItems === 'function') renderWardrobeItems();
+}
+
 function setupWardrobeEvents() {
     const openBtn = document.getElementById('open-wardrobe-btn');
     const closeBtn = document.getElementById('close-wardrobe-btn');
@@ -1574,12 +1535,12 @@ function setupWardrobeEvents() {
     if (openBtn && modal) {
         openBtn.onclick = (e) => {
             e.stopPropagation();
-        
-            if (modal.style.display === 'none' || !modal.style.display || modal.style.opacity === '0') {
+            if (modal.style.display === 'none' || !modal.style.display) {
                 switchTab('wardrobe');
-                modal.style.display = 'flex'; 
+                modal.style.display = 'block';
                 setTimeout(() => {
                     modal.style.opacity = '1';
+                    modal.style.transform = 'translate(-50%, -50%)';
                 }, 10);
             } else {
                 closeWardrobe();
@@ -1590,6 +1551,7 @@ function setupWardrobeEvents() {
     function closeWardrobe() {
         if (!modal) return;
         modal.style.opacity = '0';
+        modal.style.transform = 'translate(-50%, -40%)';
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 
@@ -1600,6 +1562,7 @@ function setupWardrobeEvents() {
         if (btn) btn.onclick = () => switchTab(tabId);
     });
 }
+
 
 
 function initAgathaSystem() {
