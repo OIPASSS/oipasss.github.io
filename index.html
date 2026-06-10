@@ -514,10 +514,8 @@
 }
 .pixel-mosaic-container {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
+    top: 0vh !important;
+    left: 0vw !important;
     width: 100vw !important;
     height: 100vh !important;
     z-index: -9999 !important;
@@ -529,7 +527,11 @@
     padding: 0 !important;
     margin: 0 !important;
     box-sizing: border-box !important;
+    transform: none !important;
+    max-width: none !important;
+    max-height: none !important;
 }
+
 
 .pixel-box {
     width: 100%;
@@ -653,6 +655,46 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
 
 
 
+
+
+
+@keyframes waveMotion {
+    0% { transform: scale(1.05) translateY(0px) rotate(0deg); filter: hue-rotate(0deg); }
+    50% { transform: scale(1.15) translateY(-25px) rotate(2deg); filter: hue-rotate(15deg); }
+    100% { transform: scale(1.05) translateY(0px) rotate(0deg); filter: hue-rotate(0deg); }
+}
+@keyframes wavePerspective {
+    0%, 100% { clip-path: ellipse(100% 85% at 50% 50%); }
+    50% { clip-path: ellipse(100% 75% at 50% 60%); }
+}
+.cyber-waves-container {
+    position: fixed !important;
+    top: -10vh !important;
+    left: -10vw !important;
+    width: 120vw !important;
+    height: 120vh !important;
+    z-index: -2 !important; 
+    pointer-events: none !important;
+    
+    background-image: radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
+    background-size: 16px 16px !important;
+    opacity: 0.18; 
+    animation: waveMotion 12s ease-in-out infinite, wavePerspective 8s ease-in-out infinite;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+html[data-theme="light"] .cyber-waves-container {
+    opacity: 0.12; 
+}
+
+
+
+
+
+
+
+
+        
         
 
         
@@ -1264,6 +1306,12 @@ const SHOP_CATALOG = {
                     <div class="liquid-paint-layer-secondary"></div>
                 </div>
             `
+        }
+        {
+            id: "decor_waves",
+            name: "Волны",
+            price: 25000,
+            html: `<div class="bg-decoration cyber-waves-container"></div>`
         }
 
     ],
