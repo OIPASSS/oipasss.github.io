@@ -1355,7 +1355,7 @@ function setupWardrobeEvents() {
     const closeBtn = document.getElementById('close-wardrobe-btn');
     const modal = document.getElementById('wardrobe-modal');
 
-    function switchTab(tabId) {
+    window.switchTab = function(tabId) {
         currentTab = tabId;
         const tabs = ['wardrobe', 'decor', 'interface'];
         tabs.forEach(t => {
