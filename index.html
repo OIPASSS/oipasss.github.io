@@ -603,7 +603,8 @@ body[data-card-style="glow"] .theme-toggle:active::after {
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
     
-  <button id="open-wardrobe-btn" class="theme-toggle" onclick="if(typeof setupWardrobeEvents === 'function') { setupWardrobeEvents(); this.onclick(); }" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
+  <button id="open-wardrobe-btn" class="theme-toggle" onclick="if(typeof setupWardrobeEvents === 'function') setupWardrobeEvents();" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle; position: relative; z-index: 99999 !important;">Магазин</button>
+
 
     <div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10002; align-items: center; justify-content: center; backdrop-filter: blur(4px); box-sizing: border-box; padding: 20px;">
         <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 20px; border-radius: 16px; max-width: 360px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;">
@@ -1331,50 +1332,49 @@ function renderWardrobeItems() {
 
     });
 }
+
 function setupWardrobeEvents() {
     const openBtn = document.getElementById('open-wardrobe-btn');
     const closeBtn = document.getElementById('close-wardrobe-btn');
     const modal = document.getElementById('wardrobe-modal');
 
-    if (openBtn && modal) {
-        openBtn.onclick = (e) => {
-            e.stopPropagation();
-            
-            if (modal.style.display === 'none' || !modal.style.display || modal.style.opacity === '0') {
-                switchTab('wardrobe');
-                
-               
-                modal.style.position = 'fixed';
-                modal.style.left = '50%';
-                modal.style.top = '50%';
-               
-                modal.style.transform = 'translate(-50%, -40%)'; 
-                modal.style.display = 'flex';
-                
-                setTimeout(() => {
-                    modal.style.opacity = '1';
-                   
-                    modal.style.transform = 'translate(-50%, -50%)';
-                }, 10);
-            } else {
-                closeWardrobe();
-            }
-        };
+    if (!modal) return;
+
+    function openWardrobe() {
+        switchTab('wardrobe');
+        modal.style.position = 'fixed';
+        modal.style.left = '50%';
+        modal.style.top = '50%';
+        modal.style.transform = 'translate(-50%, -40%)'; 
+        modal.style.display = 'flex';
+        
+        setTimeout(() => {
+            modal.style.opacity = '1';
+            modal.style.transform = 'translate(-50%, -50%)';
+        }, 10);
     }
-    
+
     function closeWardrobe() {
-        if (!modal) return;
         modal.style.opacity = '0';
-        // Плавно уплывает чуть вниз при закрытии
         modal.style.transform = 'translate(-50%, -40%)';
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 
-    if (closeBtn) closeBtn.onclick = closeWardrobe;
+    if (modal.style.display === 'none' || !modal.style.display || modal.style.opacity === '0') {
+        openWardrobe();
+    } else {
+        closeWardrobe();
+    }
+
+    if (closeBtn) {
+        closeBtn.onclick = closeWardrobe;
+    }
 
     ['wardrobe', 'decor', 'interface'].forEach(tabId => {
         const btn = document.getElementById(`tab-${tabId}`);
-        if (btn) btn.onclick = () => switchTab(tabId);
+        if (btn) {
+            btn.onclick = () => switchTab(tabId);
+        }
     });
 }
 
