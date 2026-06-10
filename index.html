@@ -511,12 +511,10 @@
     0%, 100% { opacity: 0.1; }
     50% { opacity: 0.6; }
 }
-.pixel-mosaic-container.bg-decoration {
+.pixel-mosaic-container {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
     z-index: -1 !important;
@@ -525,9 +523,8 @@
     grid-template-columns: repeat(20, 1fr) !important;
     grid-template-rows: repeat(20, 1fr) !important;
     gap: 1px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    transform: none !important;
+    padding: 2px !important;
+    box-sizing: border-box !important;
 }
 .pixel-box {
     width: 100% !important;
@@ -651,32 +648,27 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
 
 
         
-@keyframes cyber3DGrid {
+keyframes cyber3DGridMove {
     0% { background-position: 0% 0%; }
     100% { background-position: 0% -100%; }
 }
-.cyber-waves-container.bg-decoration {
+.cyber-waves-container {
     position: fixed !important;
-    top: -20vh !important;
+    top: auto !important;
+    bottom: -10vh !important; 
     left: -10vw !important;
     width: 120vw !important;
-    height: 140vh !important;
-    z-index: -2 !important;
+    height: 60vh !important;
+    z-index: -1 !important;
     pointer-events: none !important;
     background-image: radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
-    background-size: 24px 24px !important;
+    background-size: 25px 25px !important;
     opacity: 0.25 !important;
-    transform: perspective(300px) rotateX(65deg) !important;
-    transform-origin: center top !important;
-    animation: cyber3DGrid 20s linear infinite !important;
-    mask-image: linear-gradient(to top, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 90%) !important;
-    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 90%) !important;
-}
 
-body, .main-container, .container {
-    background-color: transparent !important;
+    transform: perspective(200px) rotateX(70deg) !important;
+    transform-origin: center bottom !important;
+    animation: cyber3DGridMove 25s linear infinite !important;
 }
-
 
 
 
@@ -1268,7 +1260,7 @@ const SHOP_CATALOG = {
             name: "Пиксели", 
             price: 5000, 
             html: `
-                <div class="bg-decoration pixel-mosaic-container">
+                <div class="pixel-mosaic-container">
                     <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
                     <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
                     <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
@@ -1298,7 +1290,7 @@ const SHOP_CATALOG = {
             name: "Волны",
             price: 25000,
             html: `
-                <div class="bg-decoration cyber-waves-container"></div>
+                <div class="cyber-waves-container"></div>
             `
         }
     ],
