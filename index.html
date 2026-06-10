@@ -507,36 +507,6 @@
     z-index: 1;
 }
 
-@keyframes pixelTwinkle {
-    0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.6; }
-}
-.pixel-mosaic-container {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: -1 !important;
-    pointer-events: none !important;
-    display: grid !important;
-    grid-template-columns: repeat(20, 1fr) !important;
-    grid-template-rows: repeat(20, 1fr) !important;
-    gap: 1px !important;
-    padding: 2px !important;
-    box-sizing: border-box !important;
-}
-.pixel-box {
-    width: 100% !important;
-    height: 100% !important;
-    background: var(--text-color) !important;
-    animation: pixelTwinkle 3s ease-in-out infinite !important;
-}
-.pixel-box:nth-child(2n) { animation-duration: 2s; animation-delay: 0.5s; }
-.pixel-box:nth-child(3n) { animation-duration: 4s; animation-delay: 1s; }
-.pixel-box:nth-child(5n) { animation-duration: 2.5s; animation-delay: 1.5s; }
-.pixel-box:nth-child(7n) { animation-duration: 3.5s; animation-delay: 0.2s; }
-
 
 @keyframes rotateGrad {
     0% { background-position: 0% 50%; }
@@ -648,7 +618,7 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
 
 
         
-keyframes cyber3DGridMove {
+@keyframes cyber3DGridMove {
     0% { background-position: 0% 0%; }
     100% { background-position: 0% -100%; }
 }
@@ -1253,25 +1223,6 @@ const SHOP_CATALOG = {
                 <div class="bg-decoration shooting-star" style="left: 70%; animation-delay: 1s; animation-duration: 4s;"></div>
                 <div class="bg-decoration shooting-star" style="left: 90%; animation-delay: 2s; animation-duration: 3.5s;"></div>
                 <div class="bg-decoration shooting-star" style="left: 110%; animation-delay: 0.5s; animation-duration: 5s;"></div>
-            ` 
-        },
-        { 
-            id: "decor_geometry", 
-            name: "Пиксели", 
-            price: 5000, 
-            html: `
-                <div class="pixel-mosaic-container">
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                    <div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div><div class="pixel-box"></div>
-                </div>
             ` 
         },
         {
