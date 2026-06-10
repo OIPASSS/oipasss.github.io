@@ -603,11 +603,12 @@ body[data-card-style="glow"] .theme-toggle:active::after {
         <p id="mascot-text" style="margin: 0;">Приветик, что послушаем?</p>
     </div>
     
-    <button id="open-wardrobe-btn" class="theme-toggle" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
+  <button id="open-wardrobe-btn" class="theme-toggle" onclick="if(typeof setupWardrobeEvents === 'function') { setupWardrobeEvents(); this.onclick(); }" style="margin-left: 15px; margin-bottom: 0; vertical-align: middle;">Магазин</button>
+
     <div id="wardrobe-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10002; align-items: center; justify-content: center; backdrop-filter: blur(4px); box-sizing: border-box; padding: 20px;">
         <div style="background: var(--card-bg); color: var(--text-color); border: 1px solid var(--card-border); padding: 20px; border-radius: 16px; max-width: 360px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; box-sizing: border-box;">
             <button id="close-wardrobe-btn" style="position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-color); opacity: 0.6;">✕</button>
-            <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem;">Магазин вайба</h3>
+            <h3 style="margin-top: 0; text-align: center; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; font-size: 1rem;">Магазин</h3>
             <div style="text-align: center; font-weight: bold; margin-bottom: 15px; color: #ffd700; font-size: 0.85rem; letter-spacing: 1px;">Баланс: 🎵 <span id="notes-count">0</span></div>
             <div style="display: flex; gap: 4px; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 8px; overflow-x: auto; white-space: nowrap;">
                 <button class="theme-toggle" id="tab-wardrobe" style="padding: 5px 12px; font-size: 0.75rem; margin-bottom: 0; border-radius: 6px; background: var(--text-color); color: var(--bg-color);">Гардероб</button>
@@ -1330,7 +1331,7 @@ function renderWardrobeItems() {
 
     });
 }
-
+function setupWardrobeEvents() {
     const openBtn = document.getElementById('open-wardrobe-btn');
     const closeBtn = document.getElementById('close-wardrobe-btn');
     const modal = document.getElementById('wardrobe-modal');
@@ -1338,12 +1339,22 @@ function renderWardrobeItems() {
     if (openBtn && modal) {
         openBtn.onclick = (e) => {
             e.stopPropagation();
-            if (modal.style.display === 'none' || !modal.style.display) {
+            
+            if (modal.style.display === 'none' || !modal.style.display || modal.style.opacity === '0') {
                 switchTab('wardrobe');
-                modal.style.display = 'block';
+                
+               
+                modal.style.position = 'fixed';
+                modal.style.left = '50%';
+                modal.style.top = '50%';
+               
+                modal.style.transform = 'translate(-50%, -40%)'; 
+                modal.style.display = 'flex';
+                
                 setTimeout(() => {
                     modal.style.opacity = '1';
-                    modal.style.transform = 'translateX(-50%) translateY(0px)';
+                   
+                    modal.style.transform = 'translate(-50%, -50%)';
                 }, 10);
             } else {
                 closeWardrobe();
@@ -1354,7 +1365,8 @@ function renderWardrobeItems() {
     function closeWardrobe() {
         if (!modal) return;
         modal.style.opacity = '0';
-        modal.style.transform = 'translateX(-50%) translateY(20px)';
+        // Плавно уплывает чуть вниз при закрытии
+        modal.style.transform = 'translate(-50%, -40%)';
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 
@@ -1364,6 +1376,7 @@ function renderWardrobeItems() {
         const btn = document.getElementById(`tab-${tabId}`);
         if (btn) btn.onclick = () => switchTab(tabId);
     });
+}
 
 
 const PROMO_LIST = {
