@@ -1357,7 +1357,7 @@ function setupWardrobeEvents() {
     function closeWardrobe() {
         if (!modal) return;
         modal.style.opacity = '0';
-        modal.style.transform = 'translateX(-50%) translateY(20px)';
+        modal.style.transform = 'translateY(20px)';
         setTimeout(() => { modal.style.display = 'none'; }, 300);
     }
 
@@ -1366,10 +1366,11 @@ function setupWardrobeEvents() {
             e.stopPropagation();
             if (modal.style.display === 'none' || !modal.style.display) {
                 switchTab('wardrobe');
-                modal.style.display = 'block';
+                modal.style.display = 'flex';
+                modal.style.transform = 'translateY(20px)';
                 setTimeout(() => {
                     modal.style.opacity = '1';
-                    modal.style.transform = 'translateX(-50%) translateY(-50%)';
+                    modal.style.transform = 'translateY(0px)';
                 }, 10);
             } else {
                 closeWardrobe();
