@@ -1460,7 +1460,7 @@ function setupPromoSystem() {
             }
 
             if (mascotText) {
-                mascotText.textContent = `ОГО! Ты успел перехватить код ${enteredCode}! Лови +${promoData.reward} нот! 🎉`;
+                mascotText.textContent = `Поздравляю, код ${enteredCode} успешен! Лови +${promoData.reward} нот! 🎉`;
             }
             if (typeof checkAchievements === 'function') checkAchievements();
             alert(`Промокод успешно активирован! Начислено +${promoData.reward} нот.`);
