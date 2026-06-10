@@ -480,36 +480,60 @@
     color: #28a745;
 }
 
+/* --- ПАДАЮЩИЕ ЗВЕЗДЫ ПО ДИАГОНАЛИ --- */
 @keyframes starFall {
-    0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { transform: translate(-600px, 600px) rotate(-45deg); opacity: 0; }
+    0% {
+        transform: translate(0, 0) rotate(-45deg) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+        transform: translate(-100px, 100px) rotate(-45deg) scale(1);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-1000px, 1000px) rotate(-45deg) scale(0.5);
+        opacity: 0;
+    }
 }
 .shooting-star {
     position: fixed;
-    top: -10px;
-    width: 80px;
-    height: 1.5px;
+    top: -50px;
+    width: 120px;
+    height: 2px;
     background: linear-gradient(90deg, var(--text-color), transparent);
-    animation: starFall 2s linear infinite;
+    animation: starFall 4s linear infinite;
+    z-index: 1;
 }
-@keyframes snakeWave {
-    0%, 100% { transform: translateY(0) scaleX(1); }
-    50% { transform: translateY(25px) scaleX(1.05); }
+
+/* --- КРАСИВАЯ НЕОНОВАЯ ЗМЕЙКА --- */
+@keyframes snakeGlowMove {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 0% 200%; }
 }
-.neon-snake-left {
-    position: fixed; left: 10px; top: 10%; width: 3px; height: 80%;
-    background: linear-gradient(to bottom, transparent, var(--text-color), transparent);
-    box-shadow: 0 0 15px var(--text-color); animation: snakeWave 5s ease-in-out infinite;
-    opacity: 0.4;
+.neon-snake-left, .neon-snake-right {
+    position: fixed;
+    top: 0;
+    width: 4px;
+    height: 100vh;
+    background: linear-gradient(to bottom, 
+        transparent, 
+        #00f0ff, 
+        #ff007f, 
+        #00f0ff, 
+        transparent
+    );
+    background-size: 100% 200%;
+    animation: snakeGlowMove 4s linear infinite;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.6), 0 0 30px rgba(255, 0, 127, 0.4);
+    z-index: 1;
+    opacity: 0.8;
 }
-.neon-snake-right {
-    position: fixed; right: 10px; top: 10%; width: 3px; height: 80%;
-    background: linear-gradient(to bottom, transparent, var(--text-color), transparent);
-    box-shadow: 0 0 15px var(--text-color); animation: snakeWave 6s ease-in-out infinite;
-    opacity: 0.4;
-}
+.neon-snake-left { left: 0; }
+.neon-snake-right { right: 0; }
+
 @keyframes rotateGrad {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -1135,12 +1159,12 @@ const SHOP_CATALOG = {
         { 
             id: "decor_lines", 
             name: "Падающие звезды", 
-            price: 15000, 
+            price: 5000, 
             html: `
-                <div class="bg-decoration shooting-star" style="right: 10%; animation-delay: 0s;"></div>
-                <div class="bg-decoration shooting-star" style="right: 30%; animation-delay: 0.5s;"></div>
-                <div class="bg-decoration shooting-star" style="right: 50%; animation-delay: 1s;"></div>
-                <div class="bg-decoration shooting-star" style="right: 70%; animation-delay: 1.5s;"></div>
+                <div class="bg-decoration shooting-star" style="left: 40%; animation-delay: 0s; animation-duration: 3s;"></div>
+                <div class="bg-decoration shooting-star" style="left: 70%; animation-delay: 1s; animation-duration: 4s;"></div>
+                <div class="bg-decoration shooting-star" style="left: 90%; animation-delay: 2s; animation-duration: 3.5s;"></div>
+                <div class="bg-decoration shooting-star" style="left: 110%; animation-delay: 0.5s; animation-duration: 5s;"></div>
             ` 
         },
         { 
@@ -1153,9 +1177,10 @@ const SHOP_CATALOG = {
             ` 
         }
     ],
+
     interface: [
         { id: "style_default", name: "Стандартный", price: 0, value: "" },
-        { id: "style_neon", name: "Градиент", price: 10000, value: "gradient" },
+        { id: "style_neon", name: "Градиент", price: 1000, value: "gradient" },
         { id: "style_glow", name: "Блестящий", price: 15000, value: "glow" }
     ]
 };
