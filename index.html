@@ -508,27 +508,24 @@
 }
 
 @keyframes pixelTwinkle {
-    0%, 100% { opacity: 0.05; }
-    50% { opacity: 0.45; }
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.6; }
 }
 .pixel-mosaic-container {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: -9999 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: -1 !important; 
     pointer-events: none !important;
     display: grid !important;
-    grid-template-columns: repeat(24, 1fr) !important;
-    grid-template-rows: repeat(24, 1fr) !important;
+    grid-template-columns: repeat(20, 1fr) !important;
+    grid-template-rows: repeat(20, 1fr) !important;
     gap: 1px !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    padding: 2px !important;
     box-sizing: border-box !important;
-   
-    transform: none !important;
-    contain: strict !important;
+    opacity: 0.15;
 }
 .pixel-box {
     width: 100% !important;
@@ -536,9 +533,10 @@
     background: var(--text-color) !important;
     animation: pixelTwinkle 3s ease-in-out infinite !important;
 }
-.pixel-box:nth-child(2n) { animation-duration: 2s; animation-delay: 0.3s; }
-.pixel-box:nth-child(3n) { animation-duration: 4s; animation-delay: 0.8s; }
-.pixel-box:nth-child(5n) { animation-duration: 2.5s; animation-delay: 1.2s; }
+.pixel-box:nth-child(2n) { animation-duration: 2s; animation-delay: 0.5s; }
+.pixel-box:nth-child(3n) { animation-duration: 4s; animation-delay: 1s; }
+.pixel-box:nth-child(5n) { animation-duration: 2.5s; animation-delay: 1.5s; }
+.pixel-box:nth-child(7n) { animation-duration: 3.5s; animation-delay: 0.2s; }
 
 
 @keyframes rotateGrad {
@@ -653,41 +651,22 @@ html[data-theme="light"] .liquid-paint-layer-secondary {
 
 
 
-@keyframes cyber3DWave {
-    0% {
-        background-position: 0% 0%, 0% 0%;
-        transform: perspective(400px) rotateX(60deg) rotateZ(0deg) translateZ(0px);
-    }
-    50% {
-        transform: perspective(400px) rotateX(55deg) rotateZ(4deg) translateZ(15px);
-    }
-    100% {
-        background-position: 0% 100%, 0% 100%;
-        transform: perspective(400px) rotateX(60deg) rotateZ(0deg) translateZ(0px);
-    }
+@keyframes waveMotion {
+    0%, 100% { transform: perspective(500px) rotateX(60deg) translateY(0px); }
+    50% { transform: perspective(500px) rotateX(60deg) translateY(-20px); }
 }
 .cyber-waves-container {
     position: fixed !important;
-    top: -20vh !important;
-    left: -20vw !important;
-    width: 140vw !important;
-    height: 140vh !important;
-    z-index: -9998 !important;
+    top: -30% !important;
+    left: -10% !important;
+    width: 120% !important;
+    height: 150% !important;
+    z-index: -2 !important; 
     pointer-events: none !important;
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-        radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
-    background-size: 24px 24px !important;
-    opacity: 0.25;
-    transform-origin: center bottom;
-    animation: cyber3DWave 14s ease-in-out infinite !important;
-    filter: drop-shadow(0 0 2px var(--text-color));
-}
-html[data-theme="light"] .cyber-waves-container {
-    opacity: 0.15;
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-        radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
+    background-image: radial-gradient(var(--text-color) 1.5px, transparent 1.5px) !important;
+    background-size: 20px 20px !important;
+    opacity: 0.2;
+    animation: waveMotion 10s ease-in-out infinite !important;
 }
 
 
